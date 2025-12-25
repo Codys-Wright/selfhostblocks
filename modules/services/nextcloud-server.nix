@@ -379,6 +379,33 @@ in
                     }
                   );
                 };
+
+                localMounts = lib.mkOption {
+                  default = {};
+                  description = "Additional local mounts as external storage.";
+                  type = lib.types.attrsOf (
+                    lib.types.submodule {
+                      options = {
+                        directory = lib.mkOption {
+                          type = lib.types.str;
+                          description = ''
+                            Local directory on the filesystem to mount. Use `$user` and/or `$home`
+                            which will be replaced by the user's name and home directory.
+                          '';
+                          example = "/srv/nextcloud/$user";
+                        };
+
+                        mountName = lib.mkOption {
+                          type = lib.types.str;
+                          description = ''
+                            Path of the mount in Nextcloud. Use `/` to mount as the root.
+                          '';
+                          example = "external-drive";
+                        };
+                      };
+                    }
+                  );
+                };
               };
             };
           };
@@ -1010,7 +1037,23 @@ in
                     --config datadir='${cfg'.directory}'
           fi
         ''
-      );
+      )
+      + lib.concatStrings (lib.mapAttrsToList (name: mountCfg:
+        let
+          jq = "${pkgs.jq}/bin/jq";
+        in
+        # sh
+        ''
+          exists=$(${occ} files_external:list --output=json | ${jq} 'any(.[]; .mount_point == "${mountCfg.mountName}" and .configuration.datadir == "${mountCfg.directory}")')
+          if [[ "$exists" == "false" ]]; then
+            ${occ} files_external:create \
+                    '${mountCfg.mountName}' \
+                    local \
+                    null::null \
+                    --config datadir='${mountCfg.directory}'
+          fi
+        ''
+      ) cfg.apps.externalStorage.localMounts);
     })
 
     (lib.mkIf (cfg.enable && cfg.apps.ldap.enable) {
