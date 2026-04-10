@@ -783,7 +783,6 @@ in
             "default_phone_region" = cfg.defaultPhoneRegion;
 
             "overwrite.cli.url" = "${protocol}://${fqdn}";
-            "overwritehost" = fqdnWithPort;
             # 'trusted_domains' needed otherwise we get this issue https://help.nextcloud.com/t/the-polling-url-does-not-start-with-https-despite-the-login-url-started-with-https/137576/2
             # TODO: could instead set extraTrustedDomains
             "trusted_domains" = [ fqdn ];
