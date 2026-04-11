@@ -258,7 +258,7 @@ in
             claims_policy = "${roleClaim}";
             public = false;
             authorization_policy = cfg.sso.authorization_policy;
-            token_endpoint_auth_method = "client_secret_post";
+            token_endpoint_auth_method = "client_secret_basic";
             redirect_uris = [
               "https://${cfg.subdomain}.${cfg.domain}/oauth/oidc/callback"
             ];
