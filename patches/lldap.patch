@@ -404,7 +404,7 @@ index e21deef91f3366..03f321996a3c99 100644
 +        message = ''
 +          lldap: Some users belong to groups not present in the ensureGroups attr,
 +          add the following groups or remove them from the groups a user belong to:
-+            ${lib.concatMapStringsSep quoteVariable ", " userGroupNotInEnsuredGroup}
++            ${lib.concatMapStringsSep ", " quoteVariable userGroupNotInEnsuredGroup}
 +        '';
 +      }
 +      (
@@ -418,7 +418,7 @@ index e21deef91f3366..03f321996a3c99 100644
 +          message = ''
 +            lldap: The following custom user or group fields have invalid names. Valid characters are: a-z, A-Z, 0-9, and dash (-).
 +            The offending fields are: ${
-+              lib.concatMapStringsSep quoteVariable ", " (lib.filter (x: !(validFieldName x)) allNames)
++              lib.concatMapStringsSep ", " quoteVariable (lib.filter (x: !(validFieldName x)) allNames)
 +            }
 +          '';
 +        }
