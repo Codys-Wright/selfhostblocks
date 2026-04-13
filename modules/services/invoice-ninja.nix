@@ -58,12 +58,25 @@ in
 
     appKey = lib.mkOption {
       description = "APP_KEY secret (base64 encoded).";
-      type = shb.contracts.secret.secret;
+      type = lib.types.submodule {
+        options = shb.contracts.secret.mkRequester {
+          owner = "root";
+          restartUnits = [ "podman-invoiceninja.service" ];
+        };
+      };
     };
 
     dbPassword = lib.mkOption {
       description = "MariaDB password secret.";
-      type = shb.contracts.secret.secret;
+      type = lib.types.submodule {
+        options = shb.contracts.secret.mkRequester {
+          owner = "root";
+          restartUnits = [
+            "podman-invoiceninja.service"
+            "invoiceninja-db-setup.service"
+          ];
+        };
+      };
     };
 
     ldap = {
