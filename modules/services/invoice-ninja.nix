@@ -136,7 +136,7 @@ in
       image = "invoiceninja/invoiceninja-octane:5";
       autoStart = true;
       ports = [
-        "127.0.0.1:${toString cfg.port}:80"
+        "127.0.0.1:${toString cfg.port}:8000"
       ];
       volumes = [
         "${cfg.dataDir}:/var/www/app/storage:rw"
