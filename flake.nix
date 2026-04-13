@@ -391,6 +391,7 @@
           self.nixosModules.grocy
           self.nixosModules.hledger
           self.nixosModules.immich
+          self.nixosModules.invoice-ninja
           self.nixosModules.home-assistant
           self.nixosModules.jellyfin
           self.nixosModules.karakeep
@@ -427,6 +428,7 @@
       nixosModules.grocy = modules/services/grocy.nix;
       nixosModules.hledger = modules/services/hledger.nix;
       nixosModules.immich = modules/services/immich.nix;
+      nixosModules.invoice-ninja = modules/services/invoice-ninja.nix;
       nixosModules.home-assistant = modules/services/home-assistant.nix;
       nixosModules.jellyfin = modules/services/jellyfin.nix;
       nixosModules.karakeep = modules/services/karakeep.nix;
