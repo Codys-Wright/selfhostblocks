@@ -116,7 +116,9 @@ in
         }
       ];
       settings.mysqld = {
-        bind-address = "127.0.0.1";
+        # Listen on all interfaces so the container can reach MariaDB
+        # via host.containers.internal (podman bridge gateway)
+        bind-address = "0.0.0.0";
         port = 3306;
       };
     };
