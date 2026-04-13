@@ -164,6 +164,13 @@ in
       ];
     };
 
+    # Ensure container waits for MariaDB and DB setup
+    systemd.services.podman-invoiceninja = {
+      after = [ "mysql.service" "invoiceninja-db-setup.service" ];
+      requires = [ "mysql.service" ];
+      serviceConfig.RestartSec = "10s";
+    };
+
     # Create env file with secrets before container starts
     systemd.services.podman-invoiceninja.serviceConfig.ExecStartPre = lib.mkBefore [
       ("+${pkgs.writeShellScript "invoiceninja-create-env" ''
