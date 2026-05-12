@@ -153,7 +153,7 @@ SelfHostBlocks provides building blocks that take care of common self-hosting ne
 - Backup for all services.
 - Automatic creation of ZFS datasets per service.
 - LDAP and SSO integration for most services.
-- Monitoring with Grafana and Prometheus stack with provided dashboards.
+- Monitoring with Grafana and Prometheus stack with provided dashboards and integration with Scrutiny.
 - Automatic reverse proxy and certificate management for HTTPS.
 - VPN and proxy tunneling services.
 
@@ -174,6 +174,8 @@ Also, the stack fits together nicely thanks to [contracts](#contracts).
 - Nextcloud
 - Audiobookshelf
 - Deluge + *arr stack
+- Simple NixOS Mailserver
+- Firefly-iii
 - Forgejo
 - Grocy
 - Hledger
@@ -206,7 +208,7 @@ which altogether provides a solid foundation for self-hosting services:
 - BorgBackup
 - Davfs
 - LDAP
-- Monitoring (Grafana - Prometheus - Loki stack)
+- Monitoring (Grafana - Prometheus - Loki stack + Scrutiny)
 - Nginx
 - PostgreSQL
 - Restic
@@ -248,14 +250,14 @@ shb.nextcloud = {
     host = "127.0.0.1";
     port = config.shb.lldap.ldapPort;
     dcdomain = config.shb.lldap.dcdomain;
-    adminPassword.result = config.shb.sops.secrets."nextcloud/ldap/admin_password".result;
+    adminPassword.result = config.shb.sops.secret."nextcloud/ldap/admin_password".result;
   };
   apps.sso = {
     enable = true;
     endpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
 
-    secret.result = config.shb.sops.secrets."nextcloud/sso/secret".result;
-    secretForAuthelia.result = config.shb.sops.secrets."nextcloud/sso/secretForAuthelia".result;
+    secret.result = config.shb.sops.secret."nextcloud/sso/secret".result;
+    secretForAuthelia.result = config.shb.sops.secret."nextcloud/sso/secretForAuthelia".result;
   };
 };
 ```
@@ -273,15 +275,15 @@ shb.forgejo = {
     host = "127.0.0.1";
     port = config.shb.lldap.ldapPort;
     dcdomain = config.shb.lldap.dcdomain;
-    adminPassword.result = config.shb.sops.secrets."nextcloud/ldap/admin_password".result;
+    adminPassword.result = config.shb.sops.secret."nextcloud/ldap/admin_password".result;
   };
 
   sso = {
     enable = true;
     endpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
 
-    secret.result = config.shb.sops.secrets."forgejo/sso/secret".result;
-    secretForAuthelia.result = config.shb.sops.secrets."forgejo/sso/secretForAuthelia".result;
+    secret.result = config.shb.sops.secret."forgejo/sso/secret".result;
+    secretForAuthelia.result = config.shb.sops.secret."forgejo/sso/secretForAuthelia".result;
   };
 };
 ```

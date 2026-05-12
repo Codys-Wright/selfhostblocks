@@ -11,7 +11,7 @@ let
   cfg = config.shb.authelia;
   opt = options.shb.authelia;
 
-  fqdn = builtins.replaceStrings [ "." ] [ "_" ] "${cfg.subdomain}.${cfg.domain}";
+  fqdn = "${cfg.subdomain}.${cfg.domain}";
   fqdnWithPort = if isNull cfg.port then fqdn else "${fqdn}:${toString cfg.port}";
 
   autheliaCfg = config.services.authelia.instances.${fqdn};
@@ -89,7 +89,7 @@ in
               options = shb.contracts.secret.mkRequester {
                 mode = "0400";
                 owner = cfg.autheliaUser;
-                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}" ];
+                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}.service" ];
               };
             };
           };
@@ -99,7 +99,7 @@ in
               options = shb.contracts.secret.mkRequester {
                 mode = "0400";
                 owner = cfg.autheliaUser;
-                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}" ];
+                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}.service" ];
               };
             };
           };
@@ -109,27 +109,27 @@ in
               options = shb.contracts.secret.mkRequester {
                 mode = "0400";
                 owner = cfg.autheliaUser;
-                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}" ];
+                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}.service" ];
               };
             };
           };
           storageEncryptionKey = lib.mkOption {
-            description = "Storage encryption key.";
+            description = "Storage encryption key. Must be >= 20 characters.";
             type = lib.types.submodule {
               options = shb.contracts.secret.mkRequester {
                 mode = "0400";
                 owner = cfg.autheliaUser;
-                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}" ];
+                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}.service" ];
               };
             };
           };
           identityProvidersOIDCHMACSecret = lib.mkOption {
-            description = "Identity provider OIDC HMAC secret.";
+            description = "Identity provider OIDC HMAC secret. Must be >= 40 characters.";
             type = lib.types.submodule {
               options = shb.contracts.secret.mkRequester {
                 mode = "0400";
                 owner = cfg.autheliaUser;
-                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}" ];
+                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}.service" ];
               };
             };
           };
@@ -143,7 +143,7 @@ in
               options = shb.contracts.secret.mkRequester {
                 mode = "0400";
                 owner = cfg.autheliaUser;
-                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}" ];
+                restartUnits = [ "authelia-${opt.subdomain}.${opt.domain}.service" ];
               };
             };
           };
@@ -323,7 +323,7 @@ in
                   options = shb.contracts.secret.mkRequester {
                     mode = "0400";
                     owner = cfg.autheliaUser;
-                    restartUnits = [ "authelia-${fqdn}" ];
+                    restartUnits = [ "authelia-${fqdn}.service" ];
                   };
                 };
               };
@@ -389,6 +389,20 @@ in
         Set logging level to debug and add a mitmdump instance
         to see exactly what Authelia receives and sends back.
       '';
+    };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${cfg.subdomain}.${cfg.domain}";
+          externalUrlText = "https://\${config.shb.authelia.subdomain}.\${config.shb.authelia.domain}";
+          internalUrl = "http://127.0.0.1:${toString listenPort}";
+        };
+      };
     };
   };
 
@@ -631,6 +645,7 @@ in
     shb.mitmdump.instances."authelia-${fqdn}" = lib.mkIf cfg.debug {
       listenPort = 9091;
       upstreamPort = 9090;
+      timeout = 30;
       after = [ "authelia-${fqdn}.service" ];
       enabledAddons = [ config.shb.mitmdump.addons.logger ];
       extraArgs = [

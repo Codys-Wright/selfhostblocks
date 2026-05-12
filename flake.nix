@@ -20,52 +20,66 @@
       nmdsrc,
       ...
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        originPkgs = nixpkgs.legacyPackages.${system};
-        shbPatches = originPkgs.lib.optionals (system == "x86_64-linux") [
-          # Get rid of lldap patches when https://github.com/NixOS/nixpkgs/pull/425923 is merged.
-          ./patches/lldap.patch
-          ./patches/0001-nixos-borgbackup-add-option-to-override-state-direct.patch
+    let
+      shbPatches =
+        system:
+        nixpkgs.legacyPackages.${system}.lib.optionals
+          (system == "x86_64-linux" || system == "aarch64-linux")
+          [
+            # Get rid of lldap patches when https://github.com/NixOS/nixpkgs/pull/425923 is merged.
+            ./patches/lldap.patch
+            ./patches/0001-nixos-borgbackup-add-option-to-override-state-direct.patch
 
-          # Leaving commented out as an example.
-          # (originPkgs.fetchpatch {
-          #   url = "https://github.com/NixOS/nixpkgs/pull/317107.patch";
-          #   hash = "sha256-hoLrqV7XtR1hP/m0rV9hjYUBtrSjay0qcPUYlKKuVWk=";
-          # })
-        ];
-        patchNixpkgs =
-          {
-            nixpkgs,
-            patches,
-            system,
-          }:
-          nixpkgs.legacyPackages.${system}.applyPatches {
-            name = "nixpkgs-patched";
-            src = nixpkgs;
-            inherit patches;
+            # Leaving commented out as an example.
+            # (originPkgs.fetchpatch {
+            #   url = "https://github.com/NixOS/nixpkgs/pull/317107.patch";
+            #   hash = "sha256-hoLrqV7XtR1hP/m0rV9hjYUBtrSjay0qcPUYlKKuVWk=";
+            # })
+          ];
+
+      patchNixpkgs =
+        {
+          nixpkgs,
+          patches,
+          system,
+        }:
+        nixpkgs.legacyPackages.${system}.applyPatches {
+          name = "nixpkgs-patched";
+          src = nixpkgs;
+          inherit patches;
+        };
+      patchedNixpkgs =
+        system:
+        let
+          patched = patchNixpkgs {
+            nixpkgs = inputs.nixpkgs;
+            patches = shbPatches system;
+            inherit system;
           };
-        patchedNixpkgs =
-          let
-            patched = patchNixpkgs {
-              nixpkgs = inputs.nixpkgs;
-              patches = shbPatches;
-              inherit system;
-            };
-          in
-          patched
-          // {
-            nixosSystem = args: import "${patched}/nixos/lib/eval-config.nix" args;
-          };
-        pkgs = import patchedNixpkgs {
+        in
+        patched
+        // {
+          nixosSystem = args: import "${patched}/nixos/lib/eval-config.nix" args;
+        };
+      pkgs' =
+        system:
+        import (patchedNixpkgs system) {
           inherit system;
           config.allowUnfree = true;
         };
+    in
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = pkgs' system;
 
         # The contract dummies are used to show options for contracts.
         contractDummyModules = [
           modules/contracts/backup/dummyModule.nix
+          modules/contracts/dashboard/dummyModule.nix
+          modules/contracts/databasebackup/dummyModule.nix
+          modules/contracts/datasetbackup/dummyModule.nix
+          modules/contracts/secret/dummyModule.nix
           modules/contracts/ssl/dummyModule.nix
         ];
       in
@@ -90,6 +104,13 @@
             "blocks/authelia" = ./modules/blocks/authelia.nix;
             "blocks/borgbackup" = ./modules/blocks/borgbackup.nix;
             "blocks/lldap" = ./modules/blocks/lldap.nix;
+            "blocks/mitmdump" = ./modules/blocks/mitmdump.nix;
+            "blocks/monitoring" = ./modules/blocks/monitoring.nix;
+            "blocks/nginx" = ./modules/blocks/nginx.nix;
+            "blocks/postgresql" = ./modules/blocks/postgresql.nix;
+            "blocks/restic" = ./modules/blocks/restic.nix;
+            "blocks/sanoid" = ./modules/blocks/sanoid.nix;
+            "blocks/sops" = ./modules/blocks/sops.nix;
             "blocks/ssl" = {
               module = ./modules/blocks/ssl.nix;
               optionRoot = [
@@ -97,19 +118,19 @@
                 "certs"
               ];
             };
-            "blocks/mitmdump" = ./modules/blocks/mitmdump.nix;
-            "blocks/monitoring" = ./modules/blocks/monitoring.nix;
-            "blocks/postgresql" = ./modules/blocks/postgresql.nix;
-            "blocks/restic" = ./modules/blocks/restic.nix;
-            "blocks/sops" = ./modules/blocks/sops.nix;
+            "blocks/zfs" = ./modules/blocks/zfs.nix;
+
             "services/arr" = ./modules/services/arr.nix;
+            "services/firefly-iii" = ./modules/services/firefly-iii.nix;
             "services/forgejo" = [
               ./modules/services/forgejo.nix
               (pkgs.path + "/nixos/modules/services/misc/forgejo.nix")
             ];
             "services/home-assistant" = ./modules/services/home-assistant.nix;
+            "services/homepage" = ./modules/services/homepage.nix;
             "services/jellyfin" = ./modules/services/jellyfin.nix;
             "services/karakeep" = ./modules/services/karakeep.nix;
+            "services/mailserver" = ./modules/services/mailserver.nix;
             "services/nextcloud-server" = {
               module = ./modules/services/nextcloud-server.nix;
               optionRoot = [
@@ -120,6 +141,7 @@
             "services/open-webui" = ./modules/services/open-webui.nix;
             "services/pinchflat" = ./modules/services/pinchflat.nix;
             "services/vaultwarden" = ./modules/services/vaultwarden.nix;
+
             "contracts/backup" = {
               module = ./modules/contracts/backup/dummyModule.nix;
               optionRoot = [
@@ -128,12 +150,28 @@
                 "backup"
               ];
             };
+            "contracts/dashboard" = {
+              module = ./modules/contracts/dashboard/dummyModule.nix;
+              optionRoot = [
+                "shb"
+                "contracts"
+                "dashboard"
+              ];
+            };
             "contracts/databasebackup" = {
               module = ./modules/contracts/databasebackup/dummyModule.nix;
               optionRoot = [
                 "shb"
                 "contracts"
                 "databasebackup"
+              ];
+            };
+            "contracts/datasetbackup" = {
+              module = ./modules/contracts/datasetbackup/dummyModule.nix;
+              optionRoot = [
+                "shb"
+                "contracts"
+                "datasetbackup"
               ];
             };
             "contracts/secret" = {
@@ -205,107 +243,31 @@
               '';
             });
 
+        packages.manualHtml-watch = pkgs.writeShellApplication {
+          name = "manualHtml-watch";
+          runtimeInputs = [
+            pkgs.findutils
+            pkgs.entr
+          ];
+          text = ''
+            while sleep 1; do
+              find . -name "*.nix" -o -name "*.md" \
+                | entr -d sh -c '(nix run --offline .#update-redirects && nix build --offline .#manualHtml)' || :
+            done
+          '';
+        };
+
+        packages.update-flake-lock-pr = pkgs.callPackage ./.github/workflows/update-flake-lock-pr.nix { };
+
         lib = (pkgs.callPackage ./lib { }) // {
           test = pkgs.callPackage ./test/common.nix { };
           contracts = pkgs.callPackage ./modules/contracts {
             shb = self.lib.${system};
           };
-          patches = shbPatches;
-          inherit patchNixpkgs patchedNixpkgs;
+          patches = shbPatches system;
+          inherit patchNixpkgs;
+          patchedNixpkgs = patchedNixpkgs system;
         };
-
-        checks =
-          let
-            inherit (pkgs.lib)
-              foldl
-              foldlAttrs
-              mergeAttrs
-              optionalAttrs
-              ;
-
-            importFiles =
-              files:
-              map (
-                m:
-                pkgs.callPackage m {
-                  shb = self.lib.${system};
-                }
-              ) files;
-
-            mergeTests = foldl mergeAttrs { };
-
-            flattenAttrs =
-              root: attrset:
-              foldlAttrs (
-                acc: name: value:
-                acc
-                // {
-                  "${root}_${name}" = value;
-                }
-              ) { } attrset;
-
-            vm_test =
-              name: path:
-              flattenAttrs "vm_${name}" (
-                removeAttrs
-                  (pkgs.callPackage path {
-                    shb = self.lib.${system};
-                  })
-                  [
-                    "override"
-                    "overrideDerivation"
-                  ]
-              );
-          in
-          (optionalAttrs (system == "x86_64-linux") (
-            {
-              modules = self.lib.${system}.check {
-                inherit pkgs;
-                tests = mergeTests (importFiles [
-                  ./test/modules/davfs.nix
-                  # TODO: Make this not use IFD
-                  ./test/modules/lib.nix
-                ]);
-              };
-
-              # TODO: Make this not use IFD
-              lib = nix-flake-tests.lib.check {
-                inherit pkgs;
-                tests = pkgs.callPackage ./test/modules/lib.nix {
-                  shb = self.lib.${system};
-                };
-              };
-            }
-            // (vm_test "arr" ./test/services/arr.nix)
-            // (vm_test "audiobookshelf" ./test/services/audiobookshelf.nix)
-            // (vm_test "deluge" ./test/services/deluge.nix)
-            // (vm_test "forgejo" ./test/services/forgejo.nix)
-            // (vm_test "grocy" ./test/services/grocy.nix)
-            // (vm_test "hledger" ./test/services/hledger.nix)
-            // (vm_test "immich" ./test/services/immich.nix)
-            // (vm_test "homeassistant" ./test/services/home-assistant.nix)
-            // (vm_test "jellyfin" ./test/services/jellyfin.nix)
-            // (vm_test "karakeep" ./test/services/karakeep.nix)
-            // (vm_test "nextcloud" ./test/services/nextcloud.nix)
-            // (vm_test "open-webui" ./test/services/open-webui.nix)
-            // (vm_test "paperless" ./test/services/paperless.nix)
-            // (vm_test "pinchflat" ./test/services/pinchflat.nix)
-            // (vm_test "vaultwarden" ./test/services/vaultwarden.nix)
-
-            // (vm_test "authelia" ./test/blocks/authelia.nix)
-            // (vm_test "borgbackup" ./test/blocks/borgbackup.nix)
-            // (vm_test "lldap" ./test/blocks/lldap.nix)
-            // (vm_test "lib" ./test/blocks/lib.nix)
-            // (vm_test "mitmdump" ./test/blocks/mitmdump.nix)
-            // (vm_test "monitoring" ./test/blocks/monitoring.nix)
-            // (vm_test "postgresql" ./test/blocks/postgresql.nix)
-            // (vm_test "restic" ./test/blocks/restic.nix)
-            // (vm_test "ssl" ./test/blocks/ssl.nix)
-
-            // (vm_test "contracts-backup" ./test/contracts/backup.nix)
-            // (vm_test "contracts-databasebackup" ./test/contracts/databasebackup.nix)
-            // (vm_test "contracts-secret" ./test/contracts/secret.nix)
-          ));
 
         # To see the traces, run:
         #   nix run .#playwright -- show-trace $(nix eval .#checks.x86_64-linux.vm_grocy_basic --raw)/trace/0.zip
@@ -362,6 +324,110 @@
         };
       }
     )
+    // flake-utils.lib.eachSystem [ "x86_64-linux" ] (
+      system:
+      let
+        pkgs = pkgs' system;
+      in
+      {
+        checks =
+          let
+            inherit (pkgs.lib)
+              foldl
+              foldlAttrs
+              mergeAttrs
+              ;
+
+            importFiles =
+              files:
+              map (
+                m:
+                pkgs.callPackage m {
+                  shb = self.lib.${system};
+                }
+              ) files;
+
+            mergeTests = foldl mergeAttrs { };
+
+            flattenAttrs =
+              root: attrset:
+              foldlAttrs (
+                acc: name: value:
+                acc
+                // {
+                  "${root}_${name}" = value;
+                }
+              ) { } attrset;
+
+            vm_test =
+              name: path:
+              flattenAttrs "vm_${name}" (
+                removeAttrs
+                  (pkgs.callPackage path {
+                    shb = self.lib.${system};
+                  })
+                  [
+                    "override"
+                    "overrideDerivation"
+                  ]
+              );
+          in
+          (
+            {
+              modules = self.lib.${system}.check {
+                inherit pkgs;
+                tests = mergeTests (importFiles [
+                  ./test/modules/davfs.nix
+                  # TODO: Make this not use IFD
+                  ./test/modules/lib.nix
+                ]);
+              };
+
+              # TODO: Make this not use IFD
+              lib = nix-flake-tests.lib.check {
+                inherit pkgs;
+                tests = pkgs.callPackage ./test/modules/lib.nix {
+                  shb = self.lib.${system};
+                };
+              };
+            }
+            // (vm_test "arr" ./test/services/arr.nix)
+            // (vm_test "audiobookshelf" ./test/services/audiobookshelf.nix)
+            // (vm_test "deluge" ./test/services/deluge.nix)
+            // (vm_test "firefly-iii" ./test/services/firefly-iii.nix)
+            // (vm_test "forgejo" ./test/services/forgejo.nix)
+            // (vm_test "grocy" ./test/services/grocy.nix)
+            // (vm_test "hledger" ./test/services/hledger.nix)
+            // (vm_test "immich" ./test/services/immich.nix)
+            // (vm_test "homeassistant" ./test/services/home-assistant.nix)
+            // (vm_test "homepage" ./test/services/homepage.nix)
+            // (vm_test "jellyfin" ./test/services/jellyfin.nix)
+            // (vm_test "karakeep" ./test/services/karakeep.nix)
+            // (vm_test "nextcloud" ./test/services/nextcloud.nix)
+            // (vm_test "open-webui" ./test/services/open-webui.nix)
+            // (vm_test "paperless" ./test/services/paperless.nix)
+            // (vm_test "pinchflat" ./test/services/pinchflat.nix)
+            // (vm_test "vaultwarden" ./test/services/vaultwarden.nix)
+
+            // (vm_test "authelia" ./test/blocks/authelia.nix)
+            // (vm_test "borgbackup" ./test/blocks/borgbackup.nix)
+            // (vm_test "lib" ./test/blocks/lib.nix)
+            // (vm_test "lldap" ./test/blocks/lldap.nix)
+            // (vm_test "mitmdump" ./test/blocks/mitmdump.nix)
+            // (vm_test "monitoring" ./test/blocks/monitoring.nix)
+            // (vm_test "postgresql" ./test/blocks/postgresql.nix)
+            // (vm_test "restic" ./test/blocks/restic.nix)
+            // (vm_test "ssl" ./test/blocks/ssl.nix)
+            // (vm_test "zfs" ./test/blocks/zfs.nix)
+
+            // (vm_test "contracts-backup" ./test/contracts/backup.nix)
+            // (vm_test "contracts-databasebackup" ./test/contracts/databasebackup.nix)
+            // (vm_test "contracts-datasetbackup" ./test/contracts/datasetbackup.nix)
+            // (vm_test "contracts-secret" ./test/contracts/secret.nix)
+          );
+
+      }
+    )
     // {
       herculesCI.ciSystems = [ "x86_64-linux" ];
 
@@ -378,6 +444,7 @@
           self.nixosModules.nginx
           self.nixosModules.postgresql
           self.nixosModules.restic
+          self.nixosModules.sanoid
           self.nixosModules.ssl
           self.nixosModules.tinyproxy
           self.nixosModules.vpn
@@ -387,14 +454,17 @@
           self.nixosModules.arr
           self.nixosModules.audiobookshelf
           self.nixosModules.deluge
+          self.nixosModules.firefly-iii
           self.nixosModules.forgejo
           self.nixosModules.grocy
           self.nixosModules.hledger
           self.nixosModules.immich
           self.nixosModules.invoice-ninja
           self.nixosModules.home-assistant
+          self.nixosModules.homepage
           self.nixosModules.jellyfin
           self.nixosModules.karakeep
+          self.nixosModules.mailserver
           self.nixosModules.nextcloud-server
           self.nixosModules.open-webui
           self.nixosModules.pinchflat
@@ -415,8 +485,9 @@
       nixosModules.nginx = modules/blocks/nginx.nix;
       nixosModules.postgresql = modules/blocks/postgresql.nix;
       nixosModules.restic = modules/blocks/restic.nix;
-      nixosModules.ssl = modules/blocks/ssl.nix;
+      nixosModules.sanoid = modules/blocks/sanoid.nix;
       nixosModules.sops = modules/blocks/sops.nix;
+      nixosModules.ssl = modules/blocks/ssl.nix;
       nixosModules.tinyproxy = modules/blocks/tinyproxy.nix;
       nixosModules.vpn = modules/blocks/vpn.nix;
       nixosModules.zfs = modules/blocks/zfs.nix;
@@ -424,14 +495,17 @@
       nixosModules.arr = modules/services/arr.nix;
       nixosModules.audiobookshelf = modules/services/audiobookshelf.nix;
       nixosModules.deluge = modules/services/deluge.nix;
+      nixosModules.firefly-iii = modules/services/firefly-iii.nix;
       nixosModules.forgejo = modules/services/forgejo.nix;
       nixosModules.grocy = modules/services/grocy.nix;
       nixosModules.hledger = modules/services/hledger.nix;
       nixosModules.immich = modules/services/immich.nix;
       nixosModules.invoice-ninja = modules/services/invoice-ninja.nix;
       nixosModules.home-assistant = modules/services/home-assistant.nix;
+      nixosModules.homepage = modules/services/homepage.nix;
       nixosModules.jellyfin = modules/services/jellyfin.nix;
       nixosModules.karakeep = modules/services/karakeep.nix;
+      nixosModules.mailserver = modules/services/mailserver.nix;
       nixosModules.nextcloud-server = modules/services/nextcloud-server.nix;
       nixosModules.open-webui = modules/services/open-webui.nix;
       nixosModules.paperless = modules/services/paperless.nix;

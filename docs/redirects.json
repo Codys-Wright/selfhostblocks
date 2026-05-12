@@ -53,9 +53,6 @@
   "blocks-authelia-forward-auth": [
     "blocks-authelia.html#blocks-authelia-forward-auth"
   ],
-  "blocks-authelia-global-setup": [
-    "blocks-authelia.html#blocks-authelia-global-setup"
-  ],
   "blocks-authelia-oidc": [
     "blocks-authelia.html#blocks-authelia-oidc"
   ],
@@ -64,6 +61,21 @@
   ],
   "blocks-authelia-options-shb.authelia.autheliaUser": [
     "blocks-authelia.html#blocks-authelia-options-shb.authelia.autheliaUser"
+  ],
+  "blocks-authelia-options-shb.authelia.dashboard": [
+    "blocks-authelia.html#blocks-authelia-options-shb.authelia.dashboard"
+  ],
+  "blocks-authelia-options-shb.authelia.dashboard.request": [
+    "blocks-authelia.html#blocks-authelia-options-shb.authelia.dashboard.request"
+  ],
+  "blocks-authelia-options-shb.authelia.dashboard.request.externalUrl": [
+    "blocks-authelia.html#blocks-authelia-options-shb.authelia.dashboard.request.externalUrl"
+  ],
+  "blocks-authelia-options-shb.authelia.dashboard.request.internalUrl": [
+    "blocks-authelia.html#blocks-authelia-options-shb.authelia.dashboard.request.internalUrl"
+  ],
+  "blocks-authelia-options-shb.authelia.dashboard.result": [
+    "blocks-authelia.html#blocks-authelia-options-shb.authelia.dashboard.result"
   ],
   "blocks-authelia-options-shb.authelia.dcdomain": [
     "blocks-authelia.html#blocks-authelia-options-shb.authelia.dcdomain"
@@ -314,9 +326,6 @@
   "blocks-authelia-options-shb.authelia.subdomain": [
     "blocks-authelia.html#blocks-authelia-options-shb.authelia.subdomain"
   ],
-  "blocks-authelia-shb-forward-auth": [
-    "blocks-authelia.html#blocks-authelia-shb-forward-auth"
-  ],
   "blocks-authelia-shb-oidc": [
     "blocks-authelia.html#blocks-authelia-shb-oidc"
   ],
@@ -326,6 +335,9 @@
   "blocks-authelia-troubleshooting": [
     "blocks-authelia.html#blocks-authelia-troubleshooting"
   ],
+  "blocks-authelia-usage-configuration": [
+    "blocks-authelia.html#blocks-authelia-usage-configuration"
+  ],
   "blocks-borgbackup": [
     "blocks-borgbackup.html#blocks-borgbackup"
   ],
@@ -334,6 +346,12 @@
   ],
   "blocks-borgbackup-maintenance": [
     "blocks-borgbackup.html#blocks-borgbackup-maintenance"
+  ],
+  "blocks-borgbackup-maintenance-manuql": [
+    "blocks-borgbackup.html#blocks-borgbackup-maintenance-manuql"
+  ],
+  "blocks-borgbackup-maintenance-restore": [
+    "blocks-borgbackup.html#blocks-borgbackup-maintenance-restore"
   ],
   "blocks-borgbackup-maintenance-troubleshooting": [
     "blocks-borgbackup.html#blocks-borgbackup-maintenance-troubleshooting"
@@ -433,6 +451,9 @@
   ],
   "blocks-borgbackup-options-shb.borgbackup.databases._name_.settings.stateDir": [
     "blocks-borgbackup.html#blocks-borgbackup-options-shb.borgbackup.databases._name_.settings.stateDir"
+  ],
+  "blocks-borgbackup-options-shb.borgbackup.enableDashboard": [
+    "blocks-borgbackup.html#blocks-borgbackup-options-shb.borgbackup.enableDashboard"
   ],
   "blocks-borgbackup-options-shb.borgbackup.instances": [
     "blocks-borgbackup.html#blocks-borgbackup-options-shb.borgbackup.instances"
@@ -566,6 +587,9 @@
   "blocks-category-database": [
     "blocks.html#blocks-category-database"
   ],
+  "blocks-category-filesystem": [
+    "blocks.html#blocks-category-filesystem"
+  ],
   "blocks-category-introspection": [
     "blocks.html#blocks-category-introspection"
   ],
@@ -578,8 +602,8 @@
   "blocks-lldap": [
     "blocks-lldap.html#blocks-lldap"
   ],
-  "blocks-lldap-global-setup": [
-    "blocks-lldap.html#blocks-lldap-global-setup"
+  "blocks-lldap-features": [
+    "blocks-lldap.html#blocks-lldap-features"
   ],
   "blocks-lldap-manage-groups": [
     "blocks-lldap.html#blocks-lldap-manage-groups"
@@ -622,6 +646,21 @@
   ],
   "blocks-lldap-options-shb.lldap.backup.result.restoreScript": [
     "blocks-lldap.html#blocks-lldap-options-shb.lldap.backup.result.restoreScript"
+  ],
+  "blocks-lldap-options-shb.lldap.dashboard": [
+    "blocks-lldap.html#blocks-lldap-options-shb.lldap.dashboard"
+  ],
+  "blocks-lldap-options-shb.lldap.dashboard.request": [
+    "blocks-lldap.html#blocks-lldap-options-shb.lldap.dashboard.request"
+  ],
+  "blocks-lldap-options-shb.lldap.dashboard.request.externalUrl": [
+    "blocks-lldap.html#blocks-lldap-options-shb.lldap.dashboard.request.externalUrl"
+  ],
+  "blocks-lldap-options-shb.lldap.dashboard.request.internalUrl": [
+    "blocks-lldap.html#blocks-lldap-options-shb.lldap.dashboard.request.internalUrl"
+  ],
+  "blocks-lldap-options-shb.lldap.dashboard.result": [
+    "blocks-lldap.html#blocks-lldap-options-shb.lldap.dashboard.result"
   ],
   "blocks-lldap-options-shb.lldap.dcdomain": [
     "blocks-lldap.html#blocks-lldap-options-shb.lldap.dcdomain"
@@ -824,17 +863,26 @@
   "blocks-lldap-options-shb.lldap.webUIListenPort": [
     "blocks-lldap.html#blocks-lldap-options-shb.lldap.webUIListenPort"
   ],
-  "blocks-lldap-restrict-access-by-ip": [
-    "blocks-lldap.html#blocks-lldap-restrict-access-by-ip"
-  ],
-  "blocks-lldap-ssl": [
-    "blocks-lldap.html#blocks-lldap-ssl"
-  ],
   "blocks-lldap-tests": [
     "blocks-lldap.html#blocks-lldap-tests"
   ],
   "blocks-lldap-troubleshooting": [
     "blocks-lldap.html#blocks-lldap-troubleshooting"
+  ],
+  "blocks-lldap-usage": [
+    "blocks-lldap.html#blocks-lldap-usage"
+  ],
+  "blocks-lldap-usage-applicationdashboard": [
+    "blocks-lldap.html#blocks-lldap-usage-applicationdashboard"
+  ],
+  "blocks-lldap-usage-configuration": [
+    "blocks-lldap.html#blocks-lldap-usage-configuration"
+  ],
+  "blocks-lldap-usage-restrict-access-by-ip": [
+    "blocks-lldap.html#blocks-lldap-usage-restrict-access-by-ip"
+  ],
+  "blocks-lldap-usage-ssl": [
+    "blocks-lldap.html#blocks-lldap-usage-ssl"
   ],
   "blocks-mitmdump": [
     "blocks-mitmdump.html#blocks-mitmdump"
@@ -878,6 +926,9 @@
   "blocks-mitmdump-options-shb.mitmdump.instances._name_.serviceName": [
     "blocks-mitmdump.html#blocks-mitmdump-options-shb.mitmdump.instances._name_.serviceName"
   ],
+  "blocks-mitmdump-options-shb.mitmdump.instances._name_.timeout": [
+    "blocks-mitmdump.html#blocks-mitmdump-options-shb.mitmdump.instances._name_.timeout"
+  ],
   "blocks-mitmdump-options-shb.mitmdump.instances._name_.upstreamHost": [
     "blocks-mitmdump.html#blocks-mitmdump-options-shb.mitmdump.instances._name_.upstreamHost"
   ],
@@ -920,6 +971,9 @@
   "blocks-monitoring-error-dashboard": [
     "blocks-monitoring.html#blocks-monitoring-error-dashboard"
   ],
+  "blocks-monitoring-impermanence": [
+    "blocks-monitoring.html#blocks-monitoring-impermanence"
+  ],
   "blocks-monitoring-nextcloud-dashboard": [
     "blocks-monitoring.html#blocks-monitoring-nextcloud-dashboard"
   ],
@@ -953,6 +1007,24 @@
   "blocks-monitoring-options-shb.monitoring.contactPoints": [
     "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.contactPoints"
   ],
+  "blocks-monitoring-options-shb.monitoring.dashboard": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.dashboard"
+  ],
+  "blocks-monitoring-options-shb.monitoring.dashboard.request": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.dashboard.request"
+  ],
+  "blocks-monitoring-options-shb.monitoring.dashboard.request.externalUrl": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.dashboard.request.externalUrl"
+  ],
+  "blocks-monitoring-options-shb.monitoring.dashboard.request.internalUrl": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.dashboard.request.internalUrl"
+  ],
+  "blocks-monitoring-options-shb.monitoring.dashboard.result": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.dashboard.result"
+  ],
+  "blocks-monitoring-options-shb.monitoring.dashboards": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.dashboards"
+  ],
   "blocks-monitoring-options-shb.monitoring.debugLog": [
     "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.debugLog"
   ],
@@ -964,6 +1036,9 @@
   ],
   "blocks-monitoring-options-shb.monitoring.grafanaPort": [
     "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.grafanaPort"
+  ],
+  "blocks-monitoring-options-shb.monitoring.impermanence": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.impermanence"
   ],
   "blocks-monitoring-options-shb.monitoring.ldap": [
     "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.ldap"
@@ -986,8 +1061,26 @@
   "blocks-monitoring-options-shb.monitoring.prometheusPort": [
     "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.prometheusPort"
   ],
-  "blocks-monitoring-options-shb.monitoring.provisionDashboards": [
-    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.provisionDashboards"
+  "blocks-monitoring-options-shb.monitoring.scrutiny.dashboard": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.dashboard"
+  ],
+  "blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.request": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.request"
+  ],
+  "blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.request.externalUrl": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.request.externalUrl"
+  ],
+  "blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.request.internalUrl": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.request.internalUrl"
+  ],
+  "blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.result": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.dashboard.result"
+  ],
+  "blocks-monitoring-options-shb.monitoring.scrutiny.enable": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.enable"
+  ],
+  "blocks-monitoring-options-shb.monitoring.scrutiny.subdomain": [
+    "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.scrutiny.subdomain"
   ],
   "blocks-monitoring-options-shb.monitoring.secretKey": [
     "blocks-monitoring.html#blocks-monitoring-options-shb.monitoring.secretKey"
@@ -1133,11 +1226,95 @@
   "blocks-monitoring-usage": [
     "blocks-monitoring.html#blocks-monitoring-usage"
   ],
+  "blocks-monitoring-usage-applicationdashboard": [
+    "blocks-monitoring.html#blocks-monitoring-usage-applicationdashboard"
+  ],
+  "blocks-monitoring-usage-configuration": [
+    "blocks-monitoring.html#blocks-monitoring-usage-configuration"
+  ],
   "blocks-monitoring-usage-log-optimization": [
     "blocks-monitoring.html#blocks-monitoring-usage-log-optimization"
   ],
+  "blocks-monitoring-usage-scrutiny": [
+    "blocks-monitoring.html#blocks-monitoring-usage-scrutiny"
+  ],
   "blocks-monitoring-usage-smtp": [
     "blocks-monitoring.html#blocks-monitoring-usage-smtp"
+  ],
+  "blocks-nginx": [
+    "blocks-nginx.html#blocks-nginx"
+  ],
+  "blocks-nginx-options": [
+    "blocks-nginx.html#blocks-nginx-options"
+  ],
+  "blocks-nginx-options-shb.nginx.accessLog": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.accessLog"
+  ],
+  "blocks-nginx-options-shb.nginx.debugLog": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.debugLog"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.authEndpoint": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.authEndpoint"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.autheliaRules": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.autheliaRules"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.domain": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.domain"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.extraConfig": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.extraConfig"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.phpForwardAuth": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.phpForwardAuth"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.ssl": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.ssl"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.ssl.paths": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.ssl.paths"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.ssl.paths.cert": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.ssl.paths.cert"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.ssl.paths.key": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.ssl.paths.key"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.ssl.systemdService": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.ssl.systemdService"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.subdomain": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.subdomain"
+  ],
+  "blocks-nginx-options-shb.nginx.vhosts._.upstream": [
+    "blocks-nginx.html#blocks-nginx-options-shb.nginx.vhosts._.upstream"
+  ],
+  "blocks-nginx-usage": [
+    "blocks-nginx.html#blocks-nginx-usage"
+  ],
+  "blocks-nginx-usage-accesslog": [
+    "blocks-nginx.html#blocks-nginx-usage-accesslog"
+  ],
+  "blocks-nginx-usage-debuglog": [
+    "blocks-nginx.html#blocks-nginx-usage-debuglog"
+  ],
+  "blocks-nginx-usage-extraconfig": [
+    "blocks-nginx.html#blocks-nginx-usage-extraconfig"
+  ],
+  "blocks-nginx-usage-forwardauth": [
+    "blocks-nginx.html#blocks-nginx-usage-forwardauth"
+  ],
+  "blocks-nginx-usage-shbforwardauth": [
+    "blocks-nginx.html#blocks-nginx-usage-shbforwardauth"
+  ],
+  "blocks-nginx-usage-ssl": [
+    "blocks-nginx.html#blocks-nginx-usage-ssl"
+  ],
+  "blocks-nginx-usage-upstream": [
+    "blocks-nginx.html#blocks-nginx-usage-upstream"
   ],
   "blocks-postgresql": [
     "blocks-postgresql.html#blocks-postgresql"
@@ -1147,6 +1324,9 @@
   ],
   "blocks-postgresql-contract-databasebackup-all": [
     "blocks-postgresql.html#blocks-postgresql-contract-databasebackup-all"
+  ],
+  "blocks-postgresql-ensures": [
+    "blocks-postgresql.html#blocks-postgresql-ensures"
   ],
   "blocks-postgresql-options": [
     "blocks-postgresql.html#blocks-postgresql-options"
@@ -1199,6 +1379,9 @@
   "blocks-postgresql-tests": [
     "blocks-postgresql.html#blocks-postgresql-tests"
   ],
+  "blocks-postgresql-usage": [
+    "blocks-postgresql.html#blocks-postgresql-usage"
+  ],
   "blocks-restic": [
     "blocks-restic.html#blocks-restic"
   ],
@@ -1207,6 +1390,12 @@
   ],
   "blocks-restic-maintenance": [
     "blocks-restic.html#blocks-restic-maintenance"
+  ],
+  "blocks-restic-maintenance-manuql": [
+    "blocks-restic.html#blocks-restic-maintenance-manuql"
+  ],
+  "blocks-restic-maintenance-restore": [
+    "blocks-restic.html#blocks-restic-maintenance-restore"
   ],
   "blocks-restic-maintenance-troubleshooting": [
     "blocks-restic.html#blocks-restic-maintenance-troubleshooting"
@@ -1300,6 +1489,9 @@
   ],
   "blocks-restic-options-shb.restic.databases._name_.settings.retention": [
     "blocks-restic.html#blocks-restic-options-shb.restic.databases._name_.settings.retention"
+  ],
+  "blocks-restic-options-shb.restic.enableDashboard": [
+    "blocks-restic.html#blocks-restic-options-shb.restic.enableDashboard"
   ],
   "blocks-restic-options-shb.restic.instances": [
     "blocks-restic.html#blocks-restic-options-shb.restic.instances"
@@ -1420,6 +1612,63 @@
   ],
   "blocks-restic-usage-provider-remote": [
     "blocks-restic.html#blocks-restic-usage-provider-remote"
+  ],
+  "blocks-sanoid": [
+    "blocks-sanoid.html#blocks-sanoid"
+  ],
+  "blocks-sanoid-contract-provider": [
+    "blocks-sanoid.html#blocks-sanoid-contract-provider"
+  ],
+  "blocks-sanoid-options": [
+    "blocks-sanoid.html#blocks-sanoid-options"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request.excludePatterns": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request.excludePatterns"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request.hooks": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request.hooks"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request.hooks.afterBackup": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request.hooks.afterBackup"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request.hooks.beforeBackup": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request.hooks.beforeBackup"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request.sourceDirectories": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request.sourceDirectories"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.request.user": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.request.user"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.result": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.result"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.result.backupService": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.result.backupService"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.result.restoreScript": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.result.restoreScript"
+  ],
+  "blocks-sanoid-options-shb.sanoid.backup._name_.settings": [
+    "blocks-sanoid.html#blocks-sanoid-options-shb.sanoid.backup._name_.settings"
+  ],
+  "blocks-sanoid-usage": [
+    "blocks-sanoid.html#blocks-sanoid-usage"
+  ],
+  "blocks-sanoid-usage-custom-template": [
+    "blocks-sanoid.html#blocks-sanoid-usage-custom-template"
+  ],
+  "blocks-sanoid-usage-default-template": [
+    "blocks-sanoid.html#blocks-sanoid-usage-default-template"
+  ],
+  "blocks-sanoid-usage-without-contract": [
+    "blocks-sanoid.html#blocks-sanoid-usage-without-contract"
   ],
   "blocks-sops": [
     "blocks-sops.html#blocks-sops"
@@ -1586,8 +1835,107 @@
   "blocks-ssl-options-shb.certs.certs.selfsigned._name_.systemdService": [
     "blocks-ssl.html#blocks-ssl-options-shb.certs.certs.selfsigned._name_.systemdService"
   ],
+  "blocks-ssl-options-shb.certs.enableDashboard": [
+    "blocks-ssl.html#blocks-ssl-options-shb.certs.enableDashboard"
+  ],
   "blocks-ssl-options-shb.certs.systemdService": [
     "blocks-ssl.html#blocks-ssl-options-shb.certs.systemdService"
+  ],
+  "blocks-zfs": [
+    "blocks-zfs.html#blocks-zfs"
+  ],
+  "blocks-zfs-features": [
+    "blocks-zfs.html#blocks-zfs-features"
+  ],
+  "blocks-zfs-options": [
+    "blocks-zfs.html#blocks-zfs-options"
+  ],
+  "blocks-zfs-options-shb.zfs.pools": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.after": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.after"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.excludePatterns": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.excludePatterns"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.hooks": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.hooks"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.hooks.afterBackup": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.hooks.afterBackup"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.hooks.beforeBackup": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.hooks.beforeBackup"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.sourceDirectories": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.sourceDirectories"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.user": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.request.user"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.result": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.result"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.result.backupService": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.result.backupService"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.result.restoreScript": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.backup.result.restoreScript"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.request": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.request"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.request.dataset": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.request.dataset"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.result": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.result"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.result.backupService": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.result.backupService"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.result.restoreScript": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.datasetbackup.result.restoreScript"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.defaultACLs": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.defaultACLs"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.enable": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.enable"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.group": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.group"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.mode": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.mode"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.owner": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.owner"
+  ],
+  "blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.path": [
+    "blocks-zfs.html#blocks-zfs-options-shb.zfs.pools._name_.datasets._name_.path"
+  ],
+  "blocks-zfs-usage": [
+    "blocks-zfs.html#blocks-zfs-usage"
+  ],
+  "blocks-zfs-usage-backup-dataset": [
+    "blocks-zfs.html#blocks-zfs-usage-backup-dataset"
+  ],
+  "blocks-zfs-usage-backup-files": [
+    "blocks-zfs.html#blocks-zfs-usage-backup-files"
   ],
   "build-time-validation": [
     "service-implementation-guide.html#build-time-validation"
@@ -1625,6 +1973,15 @@
   "contract-backup-usage": [
     "contracts-backup.html#contract-backup-usage"
   ],
+  "contract-dashboard": [
+    "contracts-dashboard.html#contract-dashboard"
+  ],
+  "contract-dashboard-options": [
+    "contracts-dashboard.html#contract-dashboard-options"
+  ],
+  "contract-dashboard-providers": [
+    "contracts-dashboard.html#contract-dashboard-providers"
+  ],
   "contract-databasebackup": [
     "contracts-databasebackup.html#contract-databasebackup"
   ],
@@ -1639,6 +1996,21 @@
   ],
   "contract-databasebackup-usage": [
     "contracts-databasebackup.html#contract-databasebackup-usage"
+  ],
+  "contract-dataset-backup": [
+    "contracts-datasetbackup.html#contract-dataset-backup"
+  ],
+  "contract-datasetbackup-providers": [
+    "contracts-datasetbackup.html#contract-datasetbackup-providers"
+  ],
+  "contract-datasetbackup-requesters": [
+    "contracts-datasetbackup.html#contract-datasetbackup-requesters"
+  ],
+  "contract-datasetbackup-usage": [
+    "contracts-datasetbackup.html#contract-datasetbackup-usage"
+  ],
+  "contract-datatsetbackup-options": [
+    "contracts-datasetbackup.html#contract-datatsetbackup-options"
   ],
   "contract-secret": [
     "contracts-secret.html#contract-secret"
@@ -1718,6 +2090,27 @@
   "contracts-concept": [
     "contracts.html#contracts-concept"
   ],
+  "contracts-dashboard-options-shb.contracts.dashboard": [
+    "contracts-dashboard.html#contracts-dashboard-options-shb.contracts.dashboard"
+  ],
+  "contracts-dashboard-options-shb.contracts.dashboard.request": [
+    "contracts-dashboard.html#contracts-dashboard-options-shb.contracts.dashboard.request"
+  ],
+  "contracts-dashboard-options-shb.contracts.dashboard.request.externalUrl": [
+    "contracts-dashboard.html#contracts-dashboard-options-shb.contracts.dashboard.request.externalUrl"
+  ],
+  "contracts-dashboard-options-shb.contracts.dashboard.request.internalUrl": [
+    "contracts-dashboard.html#contracts-dashboard-options-shb.contracts.dashboard.request.internalUrl"
+  ],
+  "contracts-dashboard-options-shb.contracts.dashboard.result": [
+    "contracts-dashboard.html#contracts-dashboard-options-shb.contracts.dashboard.result"
+  ],
+  "contracts-dashboard-options-shb.contracts.dashboard.settings": [
+    "contracts-dashboard.html#contracts-dashboard-options-shb.contracts.dashboard.settings"
+  ],
+  "contracts-dashboard-usage": [
+    "contracts-dashboard.html#contracts-dashboard-usage"
+  ],
   "contracts-databasebackup-options-shb.contracts.databasebackup": [
     "contracts-databasebackup.html#contracts-databasebackup-options-shb.contracts.databasebackup"
   ],
@@ -1747,6 +2140,27 @@
   ],
   "contracts-databasebackup-options-shb.contracts.databasebackup.settings": [
     "contracts-databasebackup.html#contracts-databasebackup-options-shb.contracts.databasebackup.settings"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup.request": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup.request"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup.request.dataset": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup.request.dataset"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup.result": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup.result"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup.result.backupService": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup.result.backupService"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup.result.restoreScript": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup.result.restoreScript"
+  ],
+  "contracts-datasetbackup-options-shb.contracts.datasetbackup.settings": [
+    "contracts-datasetbackup.html#contracts-datasetbackup-options-shb.contracts.datasetbackup.settings"
   ],
   "contracts-nixpkgs": [
     "contracts.html#contracts-nixpkgs"
@@ -1817,6 +2231,9 @@
   "contributing-code": [
     "contributing.html#contributing-code"
   ],
+  "contributing-debug-tests": [
+    "contributing.html#contributing-debug-tests"
+  ],
   "contributing-deploy-colmena": [
     "contributing.html#contributing-deploy-colmena"
   ],
@@ -1844,11 +2261,17 @@
   "contributing-localversion": [
     "contributing.html#contributing-localversion"
   ],
+  "contributing-playwright-tests": [
+    "contributing.html#contributing-playwright-tests"
+  ],
   "contributing-runtests": [
     "contributing.html#contributing-runtests"
   ],
   "contributing-upload": [
     "contributing.html#contributing-upload"
+  ],
+  "contributing-upload-package": [
+    "contributing.html#contributing-upload-package"
   ],
   "contributing-upstream": [
     "contributing.html#contributing-upstream"
@@ -1973,6 +2396,12 @@
   "local-testing": [
     "service-implementation-guide.html#local-testing"
   ],
+  "misc": [
+    "misc.html#misc"
+  ],
+  "misc-lock-file-update": [
+    "misc.html#misc-lock-file-update"
+  ],
   "monitoring-failures": [
     "service-implementation-guide.html#monitoring-failures"
   ],
@@ -2060,11 +2489,17 @@
   "recipes-exposeService": [
     "recipes-exposeService.html#recipes-exposeService"
   ],
+  "recipes-exposeService-applicationdashboard": [
+    "recipes-exposeService.html#recipes-exposeService-applicationdashboard"
+  ],
   "recipes-exposeService-backup": [
     "recipes-exposeService.html#recipes-exposeService-backup"
   ],
   "recipes-exposeService-debug": [
     "recipes-exposeService.html#recipes-exposeService-debug"
+  ],
+  "recipes-exposeService-impermanence": [
+    "recipes-exposeService.html#recipes-exposeService-impermanence"
   ],
   "recipes-exposeService-ldap": [
     "recipes-exposeService.html#recipes-exposeService-ldap"
@@ -2120,6 +2555,9 @@
   "services-arr": [
     "services-arr.html#services-arr"
   ],
+  "services-arr-features": [
+    "services-arr.html#services-arr-features"
+  ],
   "services-arr-options": [
     "services-arr.html#services-arr-options"
   ],
@@ -2162,6 +2600,21 @@
   "services-arr-options-shb.arr.bazarr.backup.result.restoreScript": [
     "services-arr.html#services-arr-options-shb.arr.bazarr.backup.result.restoreScript"
   ],
+  "services-arr-options-shb.arr.bazarr.dashboard": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.dashboard"
+  ],
+  "services-arr-options-shb.arr.bazarr.dashboard.request": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.dashboard.request"
+  ],
+  "services-arr-options-shb.arr.bazarr.dashboard.request.externalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.dashboard.request.externalUrl"
+  ],
+  "services-arr-options-shb.arr.bazarr.dashboard.request.internalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.dashboard.request.internalUrl"
+  ],
+  "services-arr-options-shb.arr.bazarr.dashboard.result": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.dashboard.result"
+  ],
   "services-arr-options-shb.arr.bazarr.dataDir": [
     "services-arr.html#services-arr-options-shb.arr.bazarr.dataDir"
   ],
@@ -2171,8 +2624,20 @@
   "services-arr-options-shb.arr.bazarr.enable": [
     "services-arr.html#services-arr-options-shb.arr.bazarr.enable"
   ],
+  "services-arr-options-shb.arr.bazarr.ldapUserGroup": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.ldapUserGroup"
+  ],
   "services-arr-options-shb.arr.bazarr.settings": [
     "services-arr.html#services-arr-options-shb.arr.bazarr.settings"
+  ],
+  "services-arr-options-shb.arr.bazarr.settings.ApiKey": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.settings.ApiKey"
+  ],
+  "services-arr-options-shb.arr.bazarr.settings.ApiKey.source": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.settings.ApiKey.source"
+  ],
+  "services-arr-options-shb.arr.bazarr.settings.ApiKey.transform": [
+    "services-arr.html#services-arr-options-shb.arr.bazarr.settings.ApiKey.transform"
   ],
   "services-arr-options-shb.arr.bazarr.settings.LogLevel": [
     "services-arr.html#services-arr-options-shb.arr.bazarr.settings.LogLevel"
@@ -2237,6 +2702,21 @@
   "services-arr-options-shb.arr.jackett.backup.result.restoreScript": [
     "services-arr.html#services-arr-options-shb.arr.jackett.backup.result.restoreScript"
   ],
+  "services-arr-options-shb.arr.jackett.dashboard": [
+    "services-arr.html#services-arr-options-shb.arr.jackett.dashboard"
+  ],
+  "services-arr-options-shb.arr.jackett.dashboard.request": [
+    "services-arr.html#services-arr-options-shb.arr.jackett.dashboard.request"
+  ],
+  "services-arr-options-shb.arr.jackett.dashboard.request.externalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.jackett.dashboard.request.externalUrl"
+  ],
+  "services-arr-options-shb.arr.jackett.dashboard.request.internalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.jackett.dashboard.request.internalUrl"
+  ],
+  "services-arr-options-shb.arr.jackett.dashboard.result": [
+    "services-arr.html#services-arr-options-shb.arr.jackett.dashboard.result"
+  ],
   "services-arr-options-shb.arr.jackett.dataDir": [
     "services-arr.html#services-arr-options-shb.arr.jackett.dataDir"
   ],
@@ -2245,6 +2725,9 @@
   ],
   "services-arr-options-shb.arr.jackett.enable": [
     "services-arr.html#services-arr-options-shb.arr.jackett.enable"
+  ],
+  "services-arr-options-shb.arr.jackett.ldapUserGroup": [
+    "services-arr.html#services-arr-options-shb.arr.jackett.ldapUserGroup"
   ],
   "services-arr-options-shb.arr.jackett.settings": [
     "services-arr.html#services-arr-options-shb.arr.jackett.settings"
@@ -2339,6 +2822,21 @@
   "services-arr-options-shb.arr.lidarr.backup.result.restoreScript": [
     "services-arr.html#services-arr-options-shb.arr.lidarr.backup.result.restoreScript"
   ],
+  "services-arr-options-shb.arr.lidarr.dashboard": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.dashboard"
+  ],
+  "services-arr-options-shb.arr.lidarr.dashboard.request": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.dashboard.request"
+  ],
+  "services-arr-options-shb.arr.lidarr.dashboard.request.externalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.dashboard.request.externalUrl"
+  ],
+  "services-arr-options-shb.arr.lidarr.dashboard.request.internalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.dashboard.request.internalUrl"
+  ],
+  "services-arr-options-shb.arr.lidarr.dashboard.result": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.dashboard.result"
+  ],
   "services-arr-options-shb.arr.lidarr.dataDir": [
     "services-arr.html#services-arr-options-shb.arr.lidarr.dataDir"
   ],
@@ -2348,8 +2846,20 @@
   "services-arr-options-shb.arr.lidarr.enable": [
     "services-arr.html#services-arr-options-shb.arr.lidarr.enable"
   ],
+  "services-arr-options-shb.arr.lidarr.ldapUserGroup": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.ldapUserGroup"
+  ],
   "services-arr-options-shb.arr.lidarr.settings": [
     "services-arr.html#services-arr-options-shb.arr.lidarr.settings"
+  ],
+  "services-arr-options-shb.arr.lidarr.settings.ApiKey": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.settings.ApiKey"
+  ],
+  "services-arr-options-shb.arr.lidarr.settings.ApiKey.source": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.settings.ApiKey.source"
+  ],
+  "services-arr-options-shb.arr.lidarr.settings.ApiKey.transform": [
+    "services-arr.html#services-arr-options-shb.arr.lidarr.settings.ApiKey.transform"
   ],
   "services-arr-options-shb.arr.lidarr.settings.LogLevel": [
     "services-arr.html#services-arr-options-shb.arr.lidarr.settings.LogLevel"
@@ -2414,6 +2924,21 @@
   "services-arr-options-shb.arr.radarr.backup.result.restoreScript": [
     "services-arr.html#services-arr-options-shb.arr.radarr.backup.result.restoreScript"
   ],
+  "services-arr-options-shb.arr.radarr.dashboard": [
+    "services-arr.html#services-arr-options-shb.arr.radarr.dashboard"
+  ],
+  "services-arr-options-shb.arr.radarr.dashboard.request": [
+    "services-arr.html#services-arr-options-shb.arr.radarr.dashboard.request"
+  ],
+  "services-arr-options-shb.arr.radarr.dashboard.request.externalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.radarr.dashboard.request.externalUrl"
+  ],
+  "services-arr-options-shb.arr.radarr.dashboard.request.internalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.radarr.dashboard.request.internalUrl"
+  ],
+  "services-arr-options-shb.arr.radarr.dashboard.result": [
+    "services-arr.html#services-arr-options-shb.arr.radarr.dashboard.result"
+  ],
   "services-arr-options-shb.arr.radarr.dataDir": [
     "services-arr.html#services-arr-options-shb.arr.radarr.dataDir"
   ],
@@ -2422,6 +2947,9 @@
   ],
   "services-arr-options-shb.arr.radarr.enable": [
     "services-arr.html#services-arr-options-shb.arr.radarr.enable"
+  ],
+  "services-arr-options-shb.arr.radarr.ldapUserGroup": [
+    "services-arr.html#services-arr-options-shb.arr.radarr.ldapUserGroup"
   ],
   "services-arr-options-shb.arr.radarr.settings": [
     "services-arr.html#services-arr-options-shb.arr.radarr.settings"
@@ -2501,6 +3029,21 @@
   "services-arr-options-shb.arr.readarr.backup.result.restoreScript": [
     "services-arr.html#services-arr-options-shb.arr.readarr.backup.result.restoreScript"
   ],
+  "services-arr-options-shb.arr.readarr.dashboard": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.dashboard"
+  ],
+  "services-arr-options-shb.arr.readarr.dashboard.request": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.dashboard.request"
+  ],
+  "services-arr-options-shb.arr.readarr.dashboard.request.externalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.dashboard.request.externalUrl"
+  ],
+  "services-arr-options-shb.arr.readarr.dashboard.request.internalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.dashboard.request.internalUrl"
+  ],
+  "services-arr-options-shb.arr.readarr.dashboard.result": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.dashboard.result"
+  ],
   "services-arr-options-shb.arr.readarr.dataDir": [
     "services-arr.html#services-arr-options-shb.arr.readarr.dataDir"
   ],
@@ -2510,8 +3053,20 @@
   "services-arr-options-shb.arr.readarr.enable": [
     "services-arr.html#services-arr-options-shb.arr.readarr.enable"
   ],
+  "services-arr-options-shb.arr.readarr.ldapUserGroup": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.ldapUserGroup"
+  ],
   "services-arr-options-shb.arr.readarr.settings": [
     "services-arr.html#services-arr-options-shb.arr.readarr.settings"
+  ],
+  "services-arr-options-shb.arr.readarr.settings.ApiKey": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.settings.ApiKey"
+  ],
+  "services-arr-options-shb.arr.readarr.settings.ApiKey.source": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.settings.ApiKey.source"
+  ],
+  "services-arr-options-shb.arr.readarr.settings.ApiKey.transform": [
+    "services-arr.html#services-arr-options-shb.arr.readarr.settings.ApiKey.transform"
   ],
   "services-arr-options-shb.arr.readarr.settings.LogLevel": [
     "services-arr.html#services-arr-options-shb.arr.readarr.settings.LogLevel"
@@ -2576,6 +3131,21 @@
   "services-arr-options-shb.arr.sonarr.backup.result.restoreScript": [
     "services-arr.html#services-arr-options-shb.arr.sonarr.backup.result.restoreScript"
   ],
+  "services-arr-options-shb.arr.sonarr.dashboard": [
+    "services-arr.html#services-arr-options-shb.arr.sonarr.dashboard"
+  ],
+  "services-arr-options-shb.arr.sonarr.dashboard.request": [
+    "services-arr.html#services-arr-options-shb.arr.sonarr.dashboard.request"
+  ],
+  "services-arr-options-shb.arr.sonarr.dashboard.request.externalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.sonarr.dashboard.request.externalUrl"
+  ],
+  "services-arr-options-shb.arr.sonarr.dashboard.request.internalUrl": [
+    "services-arr.html#services-arr-options-shb.arr.sonarr.dashboard.request.internalUrl"
+  ],
+  "services-arr-options-shb.arr.sonarr.dashboard.result": [
+    "services-arr.html#services-arr-options-shb.arr.sonarr.dashboard.result"
+  ],
   "services-arr-options-shb.arr.sonarr.dataDir": [
     "services-arr.html#services-arr-options-shb.arr.sonarr.dataDir"
   ],
@@ -2584,6 +3154,9 @@
   ],
   "services-arr-options-shb.arr.sonarr.enable": [
     "services-arr.html#services-arr-options-shb.arr.sonarr.enable"
+  ],
+  "services-arr-options-shb.arr.sonarr.ldapUserGroup": [
+    "services-arr.html#services-arr-options-shb.arr.sonarr.ldapUserGroup"
   ],
   "services-arr-options-shb.arr.sonarr.settings": [
     "services-arr.html#services-arr-options-shb.arr.sonarr.settings"
@@ -2621,6 +3194,30 @@
   "services-arr-options-shb.arr.sonarr.subdomain": [
     "services-arr.html#services-arr-options-shb.arr.sonarr.subdomain"
   ],
+  "services-arr-usage": [
+    "services-arr.html#services-arr-usage"
+  ],
+  "services-arr-usage-apikeys": [
+    "services-arr.html#services-arr-usage-apikeys"
+  ],
+  "services-arr-usage-applicationdashboard": [
+    "services-arr.html#services-arr-usage-applicationdashboard"
+  ],
+  "services-arr-usage-configuration": [
+    "services-arr.html#services-arr-usage-configuration"
+  ],
+  "services-arr-usage-jackett-proxy": [
+    "services-arr.html#services-arr-usage-jackett-proxy"
+  ],
+  "services-authelia-features": [
+    "blocks-authelia.html#services-authelia-features"
+  ],
+  "services-authelia-usage": [
+    "blocks-authelia.html#services-authelia-usage"
+  ],
+  "services-authelia-usage-applicationdashboard": [
+    "blocks-authelia.html#services-authelia-usage-applicationdashboard"
+  ],
   "services-category-ai": [
     "services.html#services-category-ai"
   ],
@@ -2630,14 +3227,341 @@
   "services-category-code": [
     "services.html#services-category-code"
   ],
+  "services-category-dashboard": [
+    "services.html#services-category-dashboard"
+  ],
   "services-category-documents": [
     "services.html#services-category-documents"
+  ],
+  "services-category-emails": [
+    "services.html#services-category-emails"
+  ],
+  "services-category-finance": [
+    "services.html#services-category-finance"
   ],
   "services-category-media": [
     "services.html#services-category-media"
   ],
   "services-category-passwords": [
     "services.html#services-category-passwords"
+  ],
+  "services-firefly-iii": [
+    "services-firefly-iii.html#services-firefly-iii"
+  ],
+  "services-firefly-iii-certs": [
+    "services-firefly-iii.html#services-firefly-iii-certs"
+  ],
+  "services-firefly-iii-database-inspection": [
+    "services-firefly-iii.html#services-firefly-iii-database-inspection"
+  ],
+  "services-firefly-iii-declarative-ldap": [
+    "services-firefly-iii.html#services-firefly-iii-declarative-ldap"
+  ],
+  "services-firefly-iii-features": [
+    "services-firefly-iii.html#services-firefly-iii-features"
+  ],
+  "services-firefly-iii-impermanence": [
+    "services-firefly-iii.html#services-firefly-iii-impermanence"
+  ],
+  "services-firefly-iii-mobile": [
+    "services-firefly-iii.html#services-firefly-iii-mobile"
+  ],
+  "services-firefly-iii-options": [
+    "services-firefly-iii.html#services-firefly-iii-options"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.request.group": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.request.group"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.request.mode": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.request.mode"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.request.owner": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.request.owner"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.request.restartUnits": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.request.restartUnits"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.appKey.result.path": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.appKey.result.path"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request.excludePatterns": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request.excludePatterns"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request.hooks": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request.hooks"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request.hooks.afterBackup": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request.hooks.afterBackup"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request.hooks.beforeBackup": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request.hooks.beforeBackup"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request.sourceDirectories": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request.sourceDirectories"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.request.user": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.request.user"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.result.backupService": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.result.backupService"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.backup.result.restoreScript": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.backup.result.restoreScript"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dashboard": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dashboard"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dashboard.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dashboard.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dashboard.request.externalUrl": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dashboard.request.externalUrl"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dashboard.request.internalUrl": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dashboard.request.internalUrl"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dashboard.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dashboard.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.request.group": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.request.group"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.request.mode": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.request.mode"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.request.owner": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.request.owner"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.request.restartUnits": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.request.restartUnits"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.dbPassword.result.path": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.dbPassword.result.path"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.debug": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.debug"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.domain": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.domain"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.enable": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.enable"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.impermanence": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.impermanence"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.enable": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.enable"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.group": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.group"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.mode": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.mode"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.owner": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.owner"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.restartUnits": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.request.restartUnits"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.result.path": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.firefly-iii-accessToken.result.path"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.importer.subdomain": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.importer.subdomain"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ldap": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ldap"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ldap.adminGroup": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ldap.adminGroup"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ldap.userGroup": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ldap.userGroup"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.siteOwnerEmail": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.siteOwnerEmail"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.from_address": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.from_address"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.host": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.host"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.request.group": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.request.group"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.request.mode": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.request.mode"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.request.owner": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.request.owner"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.request.restartUnits": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.request.restartUnits"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.password.result.path": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.password.result.path"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.port": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.port"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.smtp.username": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.smtp.username"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ssl": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ssl"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ssl.paths": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ssl.paths"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ssl.paths.cert": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ssl.paths.cert"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ssl.paths.key": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ssl.paths.key"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.ssl.systemdService": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.ssl.systemdService"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.adminGroup": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.adminGroup"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.authEndpoint": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.authEndpoint"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.authorization_policy": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.authorization_policy"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.clientID": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.clientID"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.enable": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.enable"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.port": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.port"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.provider": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.provider"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.request.group": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.request.group"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.request.mode": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.request.mode"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.request.owner": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.request.owner"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.request.restartUnits": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.request.restartUnits"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secret.result.path": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secret.result.path"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.group": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.group"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.mode": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.mode"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.owner": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.owner"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.restartUnits": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.request.restartUnits"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.result": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.result"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.result.path": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.sso.secretForAuthelia.result.path"
+  ],
+  "services-firefly-iii-options-shb.firefly-iii.subdomain": [
+    "services-firefly-iii.html#services-firefly-iii-options-shb.firefly-iii.subdomain"
+  ],
+  "services-firefly-iii-usage": [
+    "services-firefly-iii.html#services-firefly-iii-usage"
+  ],
+  "services-firefly-iii-usage-applicationdashboard": [
+    "services-firefly-iii.html#services-firefly-iii-usage-applicationdashboard"
+  ],
+  "services-firefly-iii-usage-backup": [
+    "services-firefly-iii.html#services-firefly-iii-usage-backup"
+  ],
+  "services-firefly-iii-usage-configuration": [
+    "services-firefly-iii.html#services-firefly-iii-usage-configuration"
   ],
   "services-forgejo": [
     "services-forgejo.html#services-forgejo"
@@ -2683,6 +3607,21 @@
   ],
   "services-forgejo-options-shb.forgejo.backup.result.restoreScript": [
     "services-forgejo.html#services-forgejo-options-shb.forgejo.backup.result.restoreScript"
+  ],
+  "services-forgejo-options-shb.forgejo.dashboard": [
+    "services-forgejo.html#services-forgejo-options-shb.forgejo.dashboard"
+  ],
+  "services-forgejo-options-shb.forgejo.dashboard.request": [
+    "services-forgejo.html#services-forgejo-options-shb.forgejo.dashboard.request"
+  ],
+  "services-forgejo-options-shb.forgejo.dashboard.request.externalUrl": [
+    "services-forgejo.html#services-forgejo-options-shb.forgejo.dashboard.request.externalUrl"
+  ],
+  "services-forgejo-options-shb.forgejo.dashboard.request.internalUrl": [
+    "services-forgejo.html#services-forgejo-options-shb.forgejo.dashboard.request.internalUrl"
+  ],
+  "services-forgejo-options-shb.forgejo.dashboard.result": [
+    "services-forgejo.html#services-forgejo-options-shb.forgejo.dashboard.result"
   ],
   "services-forgejo-options-shb.forgejo.databasePassword": [
     "services-forgejo.html#services-forgejo-options-shb.forgejo.databasePassword"
@@ -2945,6 +3884,9 @@
   "services-forgejo-usage": [
     "services-forgejo.html#services-forgejo-usage"
   ],
+  "services-forgejo-usage-applicationdashboard": [
+    "services-forgejo.html#services-forgejo-usage-applicationdashboard"
+  ],
   "services-forgejo-usage-backup": [
     "services-forgejo.html#services-forgejo-usage-backup"
   ],
@@ -3032,6 +3974,21 @@
   "services-home-assistant-options-shb.home-assistant.config.unit_system": [
     "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.config.unit_system"
   ],
+  "services-home-assistant-options-shb.home-assistant.dashboard": [
+    "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.dashboard"
+  ],
+  "services-home-assistant-options-shb.home-assistant.dashboard.request": [
+    "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.dashboard.request"
+  ],
+  "services-home-assistant-options-shb.home-assistant.dashboard.request.externalUrl": [
+    "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.dashboard.request.externalUrl"
+  ],
+  "services-home-assistant-options-shb.home-assistant.dashboard.request.internalUrl": [
+    "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.dashboard.request.internalUrl"
+  ],
+  "services-home-assistant-options-shb.home-assistant.dashboard.result": [
+    "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.dashboard.result"
+  ],
   "services-home-assistant-options-shb.home-assistant.domain": [
     "services-home-assistant.html#services-home-assistant-options-shb.home-assistant.domain"
   ],
@@ -3089,6 +4046,9 @@
   "services-home-assistant-usage": [
     "services-home-assistant.html#services-home-assistant-usage"
   ],
+  "services-home-assistant-usage-applicationdashboard": [
+    "services-home-assistant.html#services-home-assistant-usage-applicationdashboard"
+  ],
   "services-home-assistant-usage-backup": [
     "services-home-assistant.html#services-home-assistant-usage-backup"
   ],
@@ -3125,14 +4085,149 @@
   "services-home-assistant-usage-voice": [
     "services-home-assistant.html#services-home-assistant-usage-voice"
   ],
+  "services-homepage": [
+    "services-homepage.html#services-homepage"
+  ],
+  "services-homepage-features": [
+    "services-homepage.html#services-homepage-features"
+  ],
+  "services-homepage-options": [
+    "services-homepage.html#services-homepage-options"
+  ],
+  "services-homepage-options-shb.homepage.domain": [
+    "services-homepage.html#services-homepage-options-shb.homepage.domain"
+  ],
+  "services-homepage-options-shb.homepage.enable": [
+    "services-homepage.html#services-homepage-options-shb.homepage.enable"
+  ],
+  "services-homepage-options-shb.homepage.ldap": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ldap"
+  ],
+  "services-homepage-options-shb.homepage.ldap.userGroup": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ldap.userGroup"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.name": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.name"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.group": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.group"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.mode": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.mode"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.owner": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.owner"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.restartUnits": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.request.restartUnits"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.result": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.result"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.result.path": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.apiKey.result.path"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.request": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.request"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.request.externalUrl": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.request.externalUrl"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.request.internalUrl": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.request.internalUrl"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.result": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.dashboard.result"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.name": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.name"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.settings": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.settings"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.sortOrder": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.services._name_.sortOrder"
+  ],
+  "services-homepage-options-shb.homepage.servicesGroups._name_.sortOrder": [
+    "services-homepage.html#services-homepage-options-shb.homepage.servicesGroups._name_.sortOrder"
+  ],
+  "services-homepage-options-shb.homepage.ssl": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ssl"
+  ],
+  "services-homepage-options-shb.homepage.ssl.paths": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ssl.paths"
+  ],
+  "services-homepage-options-shb.homepage.ssl.paths.cert": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ssl.paths.cert"
+  ],
+  "services-homepage-options-shb.homepage.ssl.paths.key": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ssl.paths.key"
+  ],
+  "services-homepage-options-shb.homepage.ssl.systemdService": [
+    "services-homepage.html#services-homepage-options-shb.homepage.ssl.systemdService"
+  ],
+  "services-homepage-options-shb.homepage.sso": [
+    "services-homepage.html#services-homepage-options-shb.homepage.sso"
+  ],
+  "services-homepage-options-shb.homepage.sso.authEndpoint": [
+    "services-homepage.html#services-homepage-options-shb.homepage.sso.authEndpoint"
+  ],
+  "services-homepage-options-shb.homepage.sso.authorization_policy": [
+    "services-homepage.html#services-homepage-options-shb.homepage.sso.authorization_policy"
+  ],
+  "services-homepage-options-shb.homepage.sso.enable": [
+    "services-homepage.html#services-homepage-options-shb.homepage.sso.enable"
+  ],
+  "services-homepage-options-shb.homepage.subdomain": [
+    "services-homepage.html#services-homepage-options-shb.homepage.subdomain"
+  ],
+  "services-homepage-usage": [
+    "services-homepage.html#services-homepage-usage"
+  ],
+  "services-homepage-usage-custom": [
+    "services-homepage.html#services-homepage-usage-custom"
+  ],
+  "services-homepage-usage-main": [
+    "services-homepage.html#services-homepage-usage-main"
+  ],
+  "services-homepage-usage-service": [
+    "services-homepage.html#services-homepage-usage-service"
+  ],
+  "services-homepage-usage-widget": [
+    "services-homepage.html#services-homepage-usage-widget"
+  ],
   "services-jellyfin": [
     "services-jellyfin.html#services-jellyfin"
+  ],
+  "services-jellyfin-certs": [
+    "services-jellyfin.html#services-jellyfin-certs"
   ],
   "services-jellyfin-debug": [
     "services-jellyfin.html#services-jellyfin-debug"
   ],
+  "services-jellyfin-declarative-ldap": [
+    "services-jellyfin.html#services-jellyfin-declarative-ldap"
+  ],
   "services-jellyfin-features": [
     "services-jellyfin.html#services-jellyfin-features"
+  ],
+  "services-jellyfin-impermanence": [
+    "services-jellyfin.html#services-jellyfin-impermanence"
   ],
   "services-jellyfin-options": [
     "services-jellyfin.html#services-jellyfin-options"
@@ -3200,6 +4295,21 @@
   "services-jellyfin-options-shb.jellyfin.backup.result.restoreScript": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.backup.result.restoreScript"
   ],
+  "services-jellyfin-options-shb.jellyfin.dashboard": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.dashboard"
+  ],
+  "services-jellyfin-options-shb.jellyfin.dashboard.request": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.dashboard.request"
+  ],
+  "services-jellyfin-options-shb.jellyfin.dashboard.request.externalUrl": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.dashboard.request.externalUrl"
+  ],
+  "services-jellyfin-options-shb.jellyfin.dashboard.request.internalUrl": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.dashboard.request.internalUrl"
+  ],
+  "services-jellyfin-options-shb.jellyfin.dashboard.result": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.dashboard.result"
+  ],
   "services-jellyfin-options-shb.jellyfin.debug": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.debug"
   ],
@@ -3248,11 +4358,17 @@
   "services-jellyfin-options-shb.jellyfin.ldap.host": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.ldap.host"
   ],
+  "services-jellyfin-options-shb.jellyfin.ldap.plugin": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.ldap.plugin"
+  ],
   "services-jellyfin-options-shb.jellyfin.ldap.port": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.ldap.port"
   ],
   "services-jellyfin-options-shb.jellyfin.ldap.userGroup": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.ldap.userGroup"
+  ],
+  "services-jellyfin-options-shb.jellyfin.plugins": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.plugins"
   ],
   "services-jellyfin-options-shb.jellyfin.port": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.port"
@@ -3275,9 +4391,6 @@
   "services-jellyfin-options-shb.jellyfin.sso": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso"
   ],
-  "services-jellyfin-options-shb.jellyfin.sso.adminUserGroup": [
-    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.adminUserGroup"
-  ],
   "services-jellyfin-options-shb.jellyfin.sso.authorization_policy": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.authorization_policy"
   ],
@@ -3289,6 +4402,9 @@
   ],
   "services-jellyfin-options-shb.jellyfin.sso.endpoint": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.endpoint"
+  ],
+  "services-jellyfin-options-shb.jellyfin.sso.plugin": [
+    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.plugin"
   ],
   "services-jellyfin-options-shb.jellyfin.sso.provider": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.provider"
@@ -3341,29 +4457,20 @@
   "services-jellyfin-options-shb.jellyfin.sso.sharedSecretForAuthelia.result.path": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.sharedSecretForAuthelia.result.path"
   ],
-  "services-jellyfin-options-shb.jellyfin.sso.userGroup": [
-    "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.sso.userGroup"
-  ],
   "services-jellyfin-options-shb.jellyfin.subdomain": [
     "services-jellyfin.html#services-jellyfin-options-shb.jellyfin.subdomain"
   ],
   "services-jellyfin-usage": [
     "services-jellyfin.html#services-jellyfin-usage"
   ],
+  "services-jellyfin-usage-applicationdashboard": [
+    "services-jellyfin.html#services-jellyfin-usage-applicationdashboard"
+  ],
   "services-jellyfin-usage-backup": [
     "services-jellyfin.html#services-jellyfin-usage-backup"
   ],
   "services-jellyfin-usage-configuration": [
     "services-jellyfin.html#services-jellyfin-usage-configuration"
-  ],
-  "services-jellyfin-usage-https": [
-    "services-jellyfin.html#services-jellyfin-usage-https"
-  ],
-  "services-jellyfin-usage-ldap": [
-    "services-jellyfin.html#services-jellyfin-usage-ldap"
-  ],
-  "services-jellyfin-usage-sso": [
-    "services-jellyfin.html#services-jellyfin-usage-sso"
   ],
   "services-karakeep": [
     "services-karakeep.html#services-karakeep"
@@ -3409,6 +4516,21 @@
   ],
   "services-karakeep-options-shb.karakeep.backup.result.restoreScript": [
     "services-karakeep.html#services-karakeep-options-shb.karakeep.backup.result.restoreScript"
+  ],
+  "services-karakeep-options-shb.karakeep.dashboard": [
+    "services-karakeep.html#services-karakeep-options-shb.karakeep.dashboard"
+  ],
+  "services-karakeep-options-shb.karakeep.dashboard.request": [
+    "services-karakeep.html#services-karakeep-options-shb.karakeep.dashboard.request"
+  ],
+  "services-karakeep-options-shb.karakeep.dashboard.request.externalUrl": [
+    "services-karakeep.html#services-karakeep-options-shb.karakeep.dashboard.request.externalUrl"
+  ],
+  "services-karakeep-options-shb.karakeep.dashboard.request.internalUrl": [
+    "services-karakeep.html#services-karakeep-options-shb.karakeep.dashboard.request.internalUrl"
+  ],
+  "services-karakeep-options-shb.karakeep.dashboard.result": [
+    "services-karakeep.html#services-karakeep-options-shb.karakeep.dashboard.result"
   ],
   "services-karakeep-options-shb.karakeep.domain": [
     "services-karakeep.html#services-karakeep-options-shb.karakeep.domain"
@@ -3560,6 +4682,351 @@
   "services-karakeep-usage": [
     "services-karakeep.html#services-karakeep-usage"
   ],
+  "services-karakeep-usage-applicationdashboard": [
+    "services-karakeep.html#services-karakeep-usage-applicationdashboard"
+  ],
+  "services-karakeep-usage-configuration": [
+    "services-karakeep.html#services-karakeep-usage-configuration"
+  ],
+  "services-mailserver": [
+    "services-mailserver.html#services-mailserver"
+  ],
+  "services-mailserver-applicationdashboard": [
+    "services-mailserver.html#services-mailserver-applicationdashboard"
+  ],
+  "services-mailserver-certs": [
+    "services-mailserver.html#services-mailserver-certs"
+  ],
+  "services-mailserver-debug": [
+    "services-mailserver.html#services-mailserver-debug"
+  ],
+  "services-mailserver-debug-auth": [
+    "services-mailserver.html#services-mailserver-debug-auth"
+  ],
+  "services-mailserver-debug-folder-mapping": [
+    "services-mailserver.html#services-mailserver-debug-folder-mapping"
+  ],
+  "services-mailserver-debug-folders": [
+    "services-mailserver.html#services-mailserver-debug-folders"
+  ],
+  "services-mailserver-debug-local-folders": [
+    "services-mailserver.html#services-mailserver-debug-local-folders"
+  ],
+  "services-mailserver-debug-ports": [
+    "services-mailserver.html#services-mailserver-debug-ports"
+  ],
+  "services-mailserver-debug-systemd": [
+    "services-mailserver.html#services-mailserver-debug-systemd"
+  ],
+  "services-mailserver-declarative-ldap": [
+    "services-mailserver.html#services-mailserver-declarative-ldap"
+  ],
+  "services-mailserver-impermanence": [
+    "services-mailserver.html#services-mailserver-impermanence"
+  ],
+  "services-mailserver-mobile": [
+    "services-mailserver.html#services-mailserver-mobile"
+  ],
+  "services-mailserver-options": [
+    "services-mailserver.html#services-mailserver-options"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.request"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.request.group": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.request.group"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.request.mode": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.request.mode"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.request.owner": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.request.owner"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.request.restartUnits": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.request.restartUnits"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.result"
+  ],
+  "services-mailserver-options-shb.mailserver.adminPassword.result.path": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminPassword.result.path"
+  ],
+  "services-mailserver-options-shb.mailserver.adminUsername": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.adminUsername"
+  ],
+  "services-mailserver-options-shb.mailserver.backup": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request.excludePatterns": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request.excludePatterns"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request.hooks": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request.hooks"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request.hooks.afterBackup": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request.hooks.afterBackup"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request.hooks.beforeBackup": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request.hooks.beforeBackup"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request.sourceDirectories": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request.sourceDirectories"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.request.user": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.request.user"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.result"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.result.backupService": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.result.backupService"
+  ],
+  "services-mailserver-options-shb.mailserver.backup.result.restoreScript": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backup.result.restoreScript"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request.excludePatterns": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request.excludePatterns"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request.hooks": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request.hooks"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request.hooks.afterBackup": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request.hooks.afterBackup"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request.hooks.beforeBackup": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request.hooks.beforeBackup"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request.sourceDirectories": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request.sourceDirectories"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.request.user": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.request.user"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.result"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.result.backupService": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.result.backupService"
+  ],
+  "services-mailserver-options-shb.mailserver.backupDKIM.result.restoreScript": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.backupDKIM.result.restoreScript"
+  ],
+  "services-mailserver-options-shb.mailserver.dashboard": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.dashboard"
+  ],
+  "services-mailserver-options-shb.mailserver.dashboard.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.dashboard.request"
+  ],
+  "services-mailserver-options-shb.mailserver.dashboard.request.externalUrl": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.dashboard.request.externalUrl"
+  ],
+  "services-mailserver-options-shb.mailserver.dashboard.request.internalUrl": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.dashboard.request.internalUrl"
+  ],
+  "services-mailserver-options-shb.mailserver.dashboard.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.dashboard.result"
+  ],
+  "services-mailserver-options-shb.mailserver.domain": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.domain"
+  ],
+  "services-mailserver-options-shb.mailserver.enable": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.enable"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.host": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.host"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialDrafts": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialDrafts"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialJunk": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialJunk"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialSent": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialSent"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialTrash": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.mapSpecialTrash"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.group": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.group"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.mode": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.mode"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.owner": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.owner"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.restartUnits": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.request.restartUnits"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.result"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.result.path": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.password.result.path"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.port": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.port"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.sslType": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.sslType"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.timeout": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.timeout"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.accounts._name_.username": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.accounts._name_.username"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.debug": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.debug"
+  ],
+  "services-mailserver-options-shb.mailserver.imapSync.syncTimer": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.imapSync.syncTimer"
+  ],
+  "services-mailserver-options-shb.mailserver.impermanence": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.impermanence"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.account": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.account"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminName": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminName"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.request"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.request.group": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.request.group"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.request.mode": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.request.mode"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.request.owner": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.request.owner"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.request.restartUnits": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.request.restartUnits"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.result"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.adminPassword.result.path": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.adminPassword.result.path"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.dcdomain": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.dcdomain"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.enable": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.enable"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.host": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.host"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.port": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.port"
+  ],
+  "services-mailserver-options-shb.mailserver.ldap.userGroup": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ldap.userGroup"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.host": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.host"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.request": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.request"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.request.group": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.request.group"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.request.mode": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.request.mode"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.request.owner": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.request.owner"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.request.restartUnits": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.request.restartUnits"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.result": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.result"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.password.result.path": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.password.result.path"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.port": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.port"
+  ],
+  "services-mailserver-options-shb.mailserver.smtpRelay.username": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.smtpRelay.username"
+  ],
+  "services-mailserver-options-shb.mailserver.ssl": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ssl"
+  ],
+  "services-mailserver-options-shb.mailserver.ssl.paths": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ssl.paths"
+  ],
+  "services-mailserver-options-shb.mailserver.ssl.paths.cert": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ssl.paths.cert"
+  ],
+  "services-mailserver-options-shb.mailserver.ssl.paths.key": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ssl.paths.key"
+  ],
+  "services-mailserver-options-shb.mailserver.ssl.systemdService": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.ssl.systemdService"
+  ],
+  "services-mailserver-options-shb.mailserver.subdomain": [
+    "services-mailserver.html#services-mailserver-options-shb.mailserver.subdomain"
+  ],
+  "services-mailserver-usage": [
+    "services-mailserver.html#services-mailserver-usage"
+  ],
+  "services-mailserver-usage-backup": [
+    "services-mailserver.html#services-mailserver-usage-backup"
+  ],
+  "services-mailserver-usage-disk-layout": [
+    "services-mailserver.html#services-mailserver-usage-disk-layout"
+  ],
+  "services-mailserver-usage-ldap": [
+    "services-mailserver.html#services-mailserver-usage-ldap"
+  ],
+  "services-mailserver-usage-secrets": [
+    "services-mailserver.html#services-mailserver-usage-secrets"
+  ],
   "services-monitoring-features": [
     "blocks-monitoring.html#services-monitoring-features"
   ],
@@ -3604,9 +5071,6 @@
   ],
   "services-nextcloudserver-options-shb.nextcloud.adminPass.result.path": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.adminPass.result.path"
-  ],
-  "services-nextcloudserver-options-shb.nextcloud.adminUser": [
-    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.adminUser"
   ],
   "services-nextcloudserver-options-shb.nextcloud.alwaysApplyExpensiveMigrations": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.alwaysApplyExpensiveMigrations"
@@ -3848,6 +5312,21 @@
   "services-nextcloudserver-options-shb.nextcloud.backup.result.restoreScript": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.backup.result.restoreScript"
   ],
+  "services-nextcloudserver-options-shb.nextcloud.dashboard": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.dashboard"
+  ],
+  "services-nextcloudserver-options-shb.nextcloud.dashboard.request": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.dashboard.request"
+  ],
+  "services-nextcloudserver-options-shb.nextcloud.dashboard.request.externalUrl": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.dashboard.request.externalUrl"
+  ],
+  "services-nextcloudserver-options-shb.nextcloud.dashboard.request.internalUrl": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.dashboard.request.internalUrl"
+  ],
+  "services-nextcloudserver-options-shb.nextcloud.dashboard.result": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.dashboard.result"
+  ],
   "services-nextcloudserver-options-shb.nextcloud.dataDir": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.dataDir"
   ],
@@ -3863,11 +5342,17 @@
   "services-nextcloudserver-options-shb.nextcloud.enable": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.enable"
   ],
+  "services-nextcloudserver-options-shb.nextcloud.enableDashboard": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.enableDashboard"
+  ],
   "services-nextcloudserver-options-shb.nextcloud.externalFqdn": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.externalFqdn"
   ],
   "services-nextcloudserver-options-shb.nextcloud.extraApps": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.extraApps"
+  ],
+  "services-nextcloudserver-options-shb.nextcloud.initialAdminUsername": [
+    "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.initialAdminUsername"
   ],
   "services-nextcloudserver-options-shb.nextcloud.maxUploadSize": [
     "services-nextcloud.html#services-nextcloudserver-options-shb.nextcloud.maxUploadSize"
@@ -3928,6 +5413,9 @@
   ],
   "services-nextcloudserver-usage": [
     "services-nextcloud.html#services-nextcloudserver-usage"
+  ],
+  "services-nextcloudserver-usage-applicationdashboard": [
+    "services-nextcloud.html#services-nextcloudserver-usage-applicationdashboard"
   ],
   "services-nextcloudserver-usage-backup": [
     "services-nextcloud.html#services-nextcloudserver-usage-backup"
@@ -4015,6 +5503,21 @@
   ],
   "services-open-webui-options-shb.open-webui.backup.result.restoreScript": [
     "services-open-webui.html#services-open-webui-options-shb.open-webui.backup.result.restoreScript"
+  ],
+  "services-open-webui-options-shb.open-webui.dashboard": [
+    "services-open-webui.html#services-open-webui-options-shb.open-webui.dashboard"
+  ],
+  "services-open-webui-options-shb.open-webui.dashboard.request": [
+    "services-open-webui.html#services-open-webui-options-shb.open-webui.dashboard.request"
+  ],
+  "services-open-webui-options-shb.open-webui.dashboard.request.externalUrl": [
+    "services-open-webui.html#services-open-webui-options-shb.open-webui.dashboard.request.externalUrl"
+  ],
+  "services-open-webui-options-shb.open-webui.dashboard.request.internalUrl": [
+    "services-open-webui.html#services-open-webui-options-shb.open-webui.dashboard.request.internalUrl"
+  ],
+  "services-open-webui-options-shb.open-webui.dashboard.result": [
+    "services-open-webui.html#services-open-webui-options-shb.open-webui.dashboard.result"
   ],
   "services-open-webui-options-shb.open-webui.domain": [
     "services-open-webui.html#services-open-webui-options-shb.open-webui.domain"
@@ -4121,11 +5624,20 @@
   "services-open-webui-usage": [
     "services-open-webui.html#services-open-webui-usage"
   ],
+  "services-open-webui-usage-applicationdashboard": [
+    "services-open-webui.html#services-open-webui-usage-applicationdashboard"
+  ],
   "services-open-webui-usage-backup": [
     "services-open-webui.html#services-open-webui-usage-backup"
   ],
+  "services-open-webui-usage-configuration": [
+    "services-open-webui.html#services-open-webui-usage-configuration"
+  ],
   "services-pinchflat": [
     "services-pinchflat.html#services-pinchflat"
+  ],
+  "services-pinchflat-features": [
+    "services-pinchflat.html#services-pinchflat-features"
   ],
   "services-pinchflat-options": [
     "services-pinchflat.html#services-pinchflat-options"
@@ -4162,6 +5674,21 @@
   ],
   "services-pinchflat-options-shb.pinchflat.backup.result.restoreScript": [
     "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.backup.result.restoreScript"
+  ],
+  "services-pinchflat-options-shb.pinchflat.dashboard": [
+    "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.dashboard"
+  ],
+  "services-pinchflat-options-shb.pinchflat.dashboard.request": [
+    "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.dashboard.request"
+  ],
+  "services-pinchflat-options-shb.pinchflat.dashboard.request.externalUrl": [
+    "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.dashboard.request.externalUrl"
+  ],
+  "services-pinchflat-options-shb.pinchflat.dashboard.request.internalUrl": [
+    "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.dashboard.request.internalUrl"
+  ],
+  "services-pinchflat-options-shb.pinchflat.dashboard.result": [
+    "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.dashboard.result"
   ],
   "services-pinchflat-options-shb.pinchflat.domain": [
     "services-pinchflat.html#services-pinchflat-options-shb.pinchflat.domain"
@@ -4244,8 +5771,14 @@
   "services-pinchflat-usage": [
     "services-pinchflat.html#services-pinchflat-usage"
   ],
+  "services-pinchflat-usage-applicationdashboard": [
+    "services-pinchflat.html#services-pinchflat-usage-applicationdashboard"
+  ],
   "services-pinchflat-usage-backup": [
     "services-pinchflat.html#services-pinchflat-usage-backup"
+  ],
+  "services-pinchflat-usage-configuration": [
+    "services-pinchflat.html#services-pinchflat-usage-configuration"
   ],
   "services-vaultwarden": [
     "services-vaultwarden.html#services-vaultwarden"
@@ -4300,6 +5833,21 @@
   ],
   "services-vaultwarden-options-shb.vaultwarden.backup.result.restoreScript": [
     "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.backup.result.restoreScript"
+  ],
+  "services-vaultwarden-options-shb.vaultwarden.dashboard": [
+    "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.dashboard"
+  ],
+  "services-vaultwarden-options-shb.vaultwarden.dashboard.request": [
+    "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.dashboard.request"
+  ],
+  "services-vaultwarden-options-shb.vaultwarden.dashboard.request.externalUrl": [
+    "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.dashboard.request.externalUrl"
+  ],
+  "services-vaultwarden-options-shb.vaultwarden.dashboard.request.internalUrl": [
+    "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.dashboard.request.internalUrl"
+  ],
+  "services-vaultwarden-options-shb.vaultwarden.dashboard.result": [
+    "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.dashboard.result"
   ],
   "services-vaultwarden-options-shb.vaultwarden.databasePassword": [
     "services-vaultwarden.html#services-vaultwarden-options-shb.vaultwarden.databasePassword"
@@ -4411,6 +5959,9 @@
   ],
   "services-vaultwarden-usage": [
     "services-vaultwarden.html#services-vaultwarden-usage"
+  ],
+  "services-vaultwarden-usage-applicationdashboard": [
+    "services-vaultwarden.html#services-vaultwarden-usage-applicationdashboard"
   ],
   "services-vaultwarden-usage-configuration": [
     "services-vaultwarden.html#services-vaultwarden-usage-configuration"

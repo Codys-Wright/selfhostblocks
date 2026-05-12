@@ -7,7 +7,13 @@ across services.
 
 [LLDAP]: https://github.com/lldap/lldap
 
-## Global Setup {#blocks-lldap-global-setup}
+## Features {#blocks-lldap-features}
+
+- Integration with the [dashboard contract](contracts-dashboard.html) for displaying user facing application in a dashboard. [Manual](#blocks-lldap-usage-applicationdashboard)
+
+## Usage {#blocks-lldap-usage}
+
+### Initial Configuration {#blocks-lldap-usage-configuration}
 
 ```nix
 shb.lldap = {
@@ -29,7 +35,7 @@ shb.sops.secret."lldap/user_password".request = config.shb.lldap.ldapUserPasswor
 This assumes secrets are setup with SOPS
 as mentioned in [the secrets setup section](usage.html#usage-secrets) of the manual.
 
-## SSL {#blocks-lldap-ssl}
+### SSL {#blocks-lldap-usage-ssl}
 
 Using SSL is an important security practice, like always.
 Using the [SSL block][], the configuration to add to the one above is:
@@ -44,13 +50,29 @@ shb.certs.certs.letsencrypt.${domain}.extraDomains = [
 shb.lldap.ssl = config.shb.certs.certs.letsencrypt.${config.shb.lldap.domain};
 ```
 
-## Restrict Access By IP {#blocks-lldap-restrict-access-by-ip}
+### Restrict Access By IP {#blocks-lldap-usage-restrict-access-by-ip}
 
 For added security, you can restrict access to the LLDAP UI
 by adding the following line:
 
 ```nix
 shb.lldap.restrictAccessIPRange = "192.168.50.0/24";
+```
+
+### Application Dashboard {#blocks-lldap-usage-applicationdashboard}
+
+Integration with the [dashboard contract](contracts-dashboard.html) is provided
+by the [dashboard option](#blocks-lldap-options-shb.lldap.dashboard).
+
+For example using the [Homepage](services-homepage.html) service:
+
+```nix
+{
+  shb.homepage.servicesGroups.Admin.services.LLDAP = {
+    sortOrder = 2;
+    dashboard.request = config.shb.lldap.dashboard.request;
+  };
+}
 ```
 
 ## Manage Groups {#blocks-lldap-manage-groups}
@@ -61,7 +83,7 @@ Also, all other groups will be deleted and only the "family" group will remain.
 Note that the `lldap_admin`, `lldap_password_manager` and `lldap_strict_readonly` groups, which are internal to LLDAP, will always exist.
 
 If you want existing groups not declared in the `shb.lldap.ensureGroups` to be deleted,
-set [`shb.lldap.enforceGroups`](#blocks-lldap-options-shb.lldap.enforceGroups) to `false`.
+set [`shb.lldap.enforceGroups`](#blocks-lldap-options-shb.lldap.enforceGroups) to `true`.
 
 ```nix
 {
@@ -142,7 +164,7 @@ set [`shb.lldap.enforceUserMemberships`](#blocks-lldap-options-shb.lldap.enforce
   };
 
   shb.sops.secret."dad".request =
-    shb.lldap.ensureUsers.dad.password.request;
+    config.shb.lldap.ensureUsers.dad.password.request;
 }
 ```
 

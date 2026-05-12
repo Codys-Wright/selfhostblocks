@@ -144,6 +144,10 @@ let
                 description = "Log level.";
                 default = "info";
               };
+              ApiKey = lib.mkOption {
+                type = shb.secretFileType;
+                description = "Path to api key secret file.";
+              };
               Port = lib.mkOption {
                 type = lib.types.port;
                 description = "Port on which bazarr listens to incoming requests.";
@@ -172,6 +176,10 @@ let
                 description = "Log level.";
                 default = "info";
               };
+              ApiKey = lib.mkOption {
+                type = shb.secretFileType;
+                description = "Path to api key secret file.";
+              };
               Port = lib.mkOption {
                 type = lib.types.port;
                 description = "Port on which readarr listens to incoming requests.";
@@ -198,6 +206,10 @@ let
                 ];
                 description = "Log level.";
                 default = "info";
+              };
+              ApiKey = lib.mkOption {
+                type = shb.secretFileType;
+                description = "Path to api key secret file.";
               };
               Port = lib.mkOption {
                 type = lib.types.port;
@@ -305,7 +317,7 @@ let
         {
           domain = "${c.subdomain}.${c.domain}";
           policy = "two_factor";
-          subject = [ "group:arr_user" ];
+          subject = [ "group:${c.ldapUserGroup}" ];
         }
       ];
     };
@@ -344,6 +356,16 @@ let
               default = null;
             };
 
+            ldapUserGroup = lib.mkOption {
+              description = ''
+                LDAP group a user must belong to be able to login.
+
+                Note that all users are admins too.
+              '';
+              type = lib.types.str;
+              default = "arr_user";
+            };
+
             authEndpoint = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
               default = null;
@@ -370,6 +392,20 @@ let
                 };
               };
             };
+
+            dashboard = lib.mkOption {
+              description = ''
+                Dashboard contract consumer
+              '';
+              default = { };
+              type = lib.types.submodule {
+                options = shb.contracts.dashboard.mkRequester {
+                  externalUrl = "https://${cfg.${name}.subdomain}.${cfg.${name}.domain}";
+                  externalUrlText = "https://\${config.shb.arr.${name}.subdomain}.\${config.shb.arr.${name}.domain}";
+                  internalUrl = "http://127.0.0.1:${toString cfg.${name}.settings.Port}";
+                };
+              };
+            };
           }
           // (c.moreOptions or { });
         };
@@ -380,6 +416,7 @@ in
   imports = [
     ../../lib/module.nix
     ../blocks/nginx.nix
+    ../blocks/lldap.nix
   ];
 
   options.shb.arr = lib.listToAttrs (lib.mapAttrsToList appOption apps);
@@ -395,7 +432,7 @@ in
 
         services.radarr = {
           enable = true;
-          dataDir = "/var/lib/radarr";
+          dataDir = cfg'.dataDir;
         };
 
         systemd.services.radarr.preStart = shb.replaceSecrets {
@@ -405,11 +442,15 @@ in
               AuthenticationRequired = "DisabledForLocalAddresses";
               AuthenticationMethod = "External";
             });
-          resultPath = "${config.services.radarr.dataDir}/config.xml";
+          resultPath = "${cfg'.dataDir}/config.xml";
           generator = shb.replaceSecretsFormatAdapter apps.radarr.settingsFormat;
         };
 
         shb.nginx.vhosts = [ (vhosts { } cfg') ];
+
+        shb.lldap.ensureGroups = {
+          ${cfg'.ldapUserGroup} = { };
+        };
       }
     ))
 
@@ -419,11 +460,15 @@ in
         isSSOEnabled = !(isNull cfg'.authEndpoint);
       in
       {
+        systemd.tmpfiles.rules = [
+          "d ${cfg'.dataDir} 0700 ${config.services.sonarr.user} ${config.services.sonarr.user}"
+        ];
+
         services.nginx.enable = true;
 
         services.sonarr = {
           enable = true;
-          dataDir = "/var/lib/sonarr";
+          dataDir = cfg'.dataDir;
         };
         users.users.sonarr = {
           extraGroups = [ "media" ];
@@ -436,11 +481,15 @@ in
               AuthenticationRequired = "DisabledForLocalAddresses";
               AuthenticationMethod = "External";
             });
-          resultPath = "${config.services.sonarr.dataDir}/config.xml";
+          resultPath = "${cfg'.dataDir}/config.xml";
           generator = apps.sonarr.settingsFormat.generate;
         };
 
         shb.nginx.vhosts = [ (vhosts { } cfg') ];
+
+        shb.lldap.ensureGroups = {
+          ${cfg'.ldapUserGroup} = { };
+        };
       }
     ))
 
@@ -452,45 +501,64 @@ in
       {
         services.bazarr = {
           enable = true;
+          dataDir = cfg'.dataDir;
           listenPort = cfg'.settings.Port;
         };
         users.users.bazarr = {
           extraGroups = [ "media" ];
         };
-        systemd.services.bazarr.preStart = shb.replaceSecrets {
-          userConfig =
-            cfg'.settings
-            // (lib.optionalAttrs isSSOEnabled {
-              AuthenticationRequired = "DisabledForLocalAddresses";
-              AuthenticationMethod = "External";
-            });
-          resultPath = "/var/lib/bazarr/config.xml";
-          generator = apps.bazarr.settingsFormat.generate;
-        };
+        # This is actually not working. Bazarr uses a config file in dataDir/config/config.yaml
+        # which includes all configuration so we must somehow merge our declarative config with it.
+        # It's doable but will take some time. Help is welcomed.
+        #
+        # systemd.services.bazarr.preStart = shb.replaceSecrets {
+        #   userConfig =
+        #     cfg'.settings
+        #     // (lib.optionalAttrs isSSOEnabled {
+        #       AuthenticationRequired = "DisabledForLocalAddresses";
+        #       AuthenticationMethod = "External";
+        #     });
+        #   resultPath = "${cfg'.dataDir}/config.xml";
+        #   generator = apps.bazarr.settingsFormat.generate;
+        # };
 
         shb.nginx.vhosts = [ (vhosts { } cfg') ];
+
+        shb.lldap.ensureGroups = {
+          ${cfg'.ldapUserGroup} = { };
+        };
       }
     ))
 
     (lib.mkIf cfg.readarr.enable (
       let
         cfg' = cfg.readarr;
+        isSSOEnabled = !(isNull cfg'.authEndpoint);
       in
       {
         services.readarr = {
           enable = true;
-          dataDir = "/var/lib/readarr";
+          dataDir = cfg'.dataDir;
         };
         users.users.readarr = {
           extraGroups = [ "media" ];
         };
         systemd.services.readarr.preStart = shb.replaceSecrets {
-          userConfig = cfg'.settings;
-          resultPath = "${config.services.readarr.dataDir}/config.xml";
+          userConfig =
+            cfg'.settings
+            // (lib.optionalAttrs isSSOEnabled {
+              AuthenticationRequired = "DisabledForLocalAddresses";
+              AuthenticationMethod = "External";
+            });
+          resultPath = "${cfg'.dataDir}/config.xml";
           generator = apps.readarr.settingsFormat.generate;
         };
 
         shb.nginx.vhosts = [ (vhosts { } cfg') ];
+
+        shb.lldap.ensureGroups = {
+          ${cfg'.ldapUserGroup} = { };
+        };
       }
     ))
 
@@ -502,7 +570,7 @@ in
       {
         services.lidarr = {
           enable = true;
-          dataDir = "/var/lib/lidarr";
+          dataDir = cfg'.dataDir;
         };
         users.users.lidarr = {
           extraGroups = [ "media" ];
@@ -514,11 +582,15 @@ in
               AuthenticationRequired = "DisabledForLocalAddresses";
               AuthenticationMethod = "External";
             });
-          resultPath = "${config.services.lidarr.dataDir}/config.xml";
+          resultPath = "${cfg'.dataDir}/config.xml";
           generator = apps.lidarr.settingsFormat.generate;
         };
 
         shb.nginx.vhosts = [ (vhosts { } cfg') ];
+
+        shb.lldap.ensureGroups = {
+          ${cfg'.ldapUserGroup} = { };
+        };
       }
     ))
 
@@ -529,7 +601,7 @@ in
       {
         services.jackett = {
           enable = true;
-          dataDir = "/var/lib/jackett";
+          dataDir = cfg'.dataDir;
         };
         # TODO: avoid implicitly relying on the media group
         users.users.jackett = {
@@ -537,7 +609,7 @@ in
         };
         systemd.services.jackett.preStart = shb.replaceSecrets {
           userConfig = shb.renameAttrName cfg'.settings "ApiKey" "APIKey";
-          resultPath = "${config.services.jackett.dataDir}/ServerConfig.json";
+          resultPath = "${cfg'.dataDir}/ServerConfig.json";
           generator = apps.jackett.settingsFormat.generate;
         };
 
@@ -546,6 +618,10 @@ in
             extraBypassResources = [ "^/dl.*" ];
           } cfg')
         ];
+
+        shb.lldap.ensureGroups = {
+          ${cfg'.ldapUserGroup} = { };
+        };
       }
     ))
   ];

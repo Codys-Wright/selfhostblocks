@@ -20,6 +20,7 @@ let
   fqdn = "${subdomain}.${domain}";
   listenPort = 9000;
   dataDir = "/var/lib/awesome";
+  ldapGroup = "awesome_user";
 in
 ```
 
@@ -75,11 +76,11 @@ shb.nginx.vhosts = [
   {
     inherit subdomain domain;
     ssl = config.shb.certs.certs.letsencrypt.${domain};
-    upstream = "http://127.0.0.1:${toString config.services.calibre-web.listen.port}";
+    upstream = "http://127.0.0.1:${toString listenPort}";
     authEndpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
     autheliaRules = [{
       policy = "one_factor";
-      subject = [ "group:${config.shb.lldap.ensureGroups.calibre_user.name}" ];
+      subject = [ "group:${ldapGroup}" ];
     }];
   }
 ];
@@ -120,10 +121,36 @@ shb.restic.instances.awesome = {
   request.sourceDirectories = [ dataDir ];
   settings.enable = true;
   settings.passphrase.result = config.shb.sops.secret.awesome.result;
-  settings.repository.path = "/srv/backup/awesome";
+  settings.repository.path = config.services.awesome.dataDir;
 };
 
 shb.sops.secret."awesome" = {
   request = config.shb.restic.instances.awesome.settings.passphrase.request;
 };
+```
+
+## Impermanence {#recipes-exposeService-impermanence}
+
+To save the data folder in an impermanence setup, add:
+
+```nix
+{
+  shb.zfs.datasets."safe/awesome".path = config.services.awesome.dataDir;
+}
+```
+
+## Application Dashboard {#recipes-exposeService-applicationdashboard}
+
+For example using the [Homepage](services-homepage.html) service:
+
+```nix
+{
+  shb.homepage.servicesGroups.MyServices.services.Awesome = {
+    sortOrder = 1;
+    dashboard.request = {
+      externalUrl = "https://${fqdn}";
+      internalUrl = "http://127.0.0.1:${toString listenPort}";
+    };
+  };
+}
 ```

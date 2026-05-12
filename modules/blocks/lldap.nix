@@ -99,7 +99,7 @@ in
     };
 
     ldapUserPassword = lib.mkOption {
-      description = "LDAP admin user secret.";
+      description = "LDAP admin user secret. Must be >= 8 characters.";
       type = lib.types.submodule {
         options = shb.contracts.secret.mkRequester {
           mode = "0440";
@@ -331,7 +331,21 @@ in
     enforceGroups = mkOption {
       description = "Remove groups not set declaratively.";
       type = types.bool;
-      default = true;
+      default = false;
+    };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${cfg.subdomain}.${cfg.domain}";
+          externalUrlText = "https://\${config.shb.lldap.subdomain}.\${config.shb.lldap.domain}";
+          internalUrl = "http://127.0.0.1:${toString cfg.webUIListenPort}";
+        };
+      };
     };
   };
 
@@ -402,6 +416,41 @@ in
           "password_file" = toString v.password.result.path;
         }
       ) cfg.ensureUsers;
+    };
+
+    # Harden lldap following https://github.com/NixOS/nixpkgs/pull/487933
+    systemd.services.lldap.serviceConfig = {
+      RemoveIPC = true;
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      RestrictAddressFamilies = [
+        "AF_UNIX"
+        "AF_INET"
+        "AF_INET6"
+      ];
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged"
+        "~@resources"
+      ];
+      SystemCallArchitectures = "native";
+      CapabilityBoundingSet = "";
+      LockPersonality = true;
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      PrivateDevices = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHome = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectSystem = "strict";
+      ProtectProc = "invisible";
+      ProcSubset = "pid";
+      MemoryDenyWriteExecute = true;
     };
 
     shb.mitmdump.instances."lldap-web" = lib.mkIf cfg.debug {

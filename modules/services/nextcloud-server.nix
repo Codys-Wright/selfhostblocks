@@ -28,10 +28,21 @@ in
 {
   imports = [
     ../../lib/module.nix
+    ../blocks/authelia.nix
+    ../blocks/monitoring.nix
+
+    (lib.mkRenamedOptionModule
+      [ "shb" "nextcloud" "adminUser" ]
+      [ "shb" "nextcloud" "initialAdminUsername" ]
+    )
   ];
 
   options.shb.nextcloud = {
-    enable = lib.mkEnableOption "selfhostblocks.nextcloud-server";
+    enable = lib.mkEnableOption "the SHB Nextcloud service";
+
+    enableDashboard = lib.mkEnableOption "the Nextcloud SHB dashboard" // {
+      default = true;
+    };
 
     subdomain = lib.mkOption {
       type = lib.types.str;
@@ -85,10 +96,10 @@ in
     version = lib.mkOption {
       description = "Nextcloud version to choose from.";
       type = lib.types.enum [
-        31
         32
+        33
       ];
-      default = 31;
+      default = 32;
     };
 
     dataDir = lib.mkOption {
@@ -104,9 +115,9 @@ in
       example = lib.literalExpression ''["var.mount"]'';
     };
 
-    adminUser = lib.mkOption {
+    initialAdminUsername = lib.mkOption {
       type = lib.types.str;
-      description = "Username of the initial admin user.";
+      description = "Initial username of the admin user. Once it is set, it cannot be changed!";
       default = "root";
     };
 
@@ -484,9 +495,6 @@ in
           sso = lib.mkOption {
             description = ''
               SSO Integration App. [Manual](https://docs.nextcloud.com/server/latest/admin_manual/configuration_user/oidc_auth.html)
-
-              Enabling this app will create a new LDAP configuration or update one that exists with
-              the given host.
             '';
             default = { };
             type = lib.types.submodule {
@@ -528,7 +536,12 @@ in
 
                 adminGroup = lib.mkOption {
                   type = lib.types.str;
-                  description = "Group admins must belong to to be able to login to Nextcloud.";
+                  description = ''
+                    Group admins must belong to to be able to login to Nextcloud.
+
+                    This option is purposely not inside the LDAP app because only SSO allows
+                    distinguising between users and admins.
+                  '';
                   default = "nextcloud_admin";
                 };
 
@@ -700,6 +713,11 @@ in
         Upon starting the service, disable maintenance mode if set.
 
         This is useful if a deploy failed and you try to redeploy.
+
+        Note that even if the disabling of maintenance mode fails,
+        SHB will still allow the startup to continue
+        because there are valid reasons for maintenance mode
+        to not be able to be lifted, like for example this is a brand new installation.
       '';
     };
 
@@ -710,8 +728,26 @@ in
         Run `occ maintenance:repair --include-expensive` on service start.
 
         Larger instances should disable this and run the command at a convenient time
-        but Self Host Blocks assumes that it will not be the case for most users.
+        but SHB assumes that it will not be the case for most users.
+
+        Note that SHB will still allow the startup
+        even if the repair failed.
       '';
+    };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${fqdn}";
+          externalUrlText = "https://\${config.shb.nextcloud.subdomain}.\${config.shb.nextcloud.domain}";
+          internalUrl = "https://${fqdn}";
+          internalUrlText = "https://\${config.shb.nextcloud.subdomain}.\${config.shb.nextcloud.domain}";
+        };
+      };
     };
   };
 
@@ -754,7 +790,7 @@ in
 
         config = {
           dbtype = "pgsql";
-          adminuser = cfg.adminUser;
+          adminuser = cfg.initialAdminUsername;
           adminpassFile = cfg.adminPass.result.path;
         };
         database.createLocally = true;
@@ -1067,6 +1103,7 @@ in
           ${occ} app:enable  user_ldap
 
           ${occ} config:app:set user_ldap ${cID}ldap_configuration_active --value=0
+          ${occ} config:app:set user_ldap configuration_prefixes --value '["${cID}"]'
 
           # The following CLI commands follow
           # https://github.com/lldap/lldap/blob/main/example_configs/nextcloud.md#nextcloud-config--the-cli-way
@@ -1199,7 +1236,10 @@ in
               groups = "groups";
               is_admin = "is_nextcloud_admin";
             };
-            oidc_login_allowed_groups = [ cfg.apps.ldap.userGroup ];
+            oidc_login_allowed_groups = [
+              cfg.apps.ldap.userGroup
+              cfg.apps.sso.adminGroup
+            ];
             oidc_login_default_group = "oidc";
             oidc_login_use_external_storage = false;
             oidc_login_scope = lib.concatStringsSep " " scopes;
@@ -1269,7 +1309,7 @@ in
     (lib.mkIf (cfg.enable && cfg.autoDisableMaintenanceModeOnStart) {
       systemd.services.nextcloud-setup.preStart = lib.mkBefore ''
         if [[ -e /var/lib/nextcloud/config/config.php ]]; then
-            ${occ} maintenance:mode --no-interaction --quiet --off
+            ${occ} maintenance:mode --no-interaction --quiet --off || true
         fi
       '';
     })
@@ -1277,7 +1317,7 @@ in
     (lib.mkIf (cfg.enable && cfg.alwaysApplyExpensiveMigrations) {
       systemd.services.nextcloud-setup.script = ''
         if [[ -e /var/lib/nextcloud/config/config.php ]]; then
-            ${occ} maintenance:repair --include-expensive
+            ${occ} maintenance:repair --include-expensive || true
         fi
       '';
     })
@@ -1371,5 +1411,11 @@ in
         '';
       }
     ))
+
+    (lib.mkIf (cfg.enable && cfg.enableDashboard) {
+      shb.monitoring.dashboards = [
+        ./nextcloud-server/dashboard/Nextcloud.json
+      ];
+    })
   ];
 }

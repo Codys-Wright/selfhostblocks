@@ -3,6 +3,7 @@
 Defined in [`/modules/blocks/restic.nix`](@REPO@/modules/blocks/restic.nix).
 
 This block sets up a backup job using [Restic][].
+It is heavily based on the nixpkgs Restic module.
 
 [restic]: https://restic.net/
 
@@ -50,7 +51,7 @@ shb.restic.instances."myservice" = {
   settings = {
     enable = true;
 
-    passphrase.result = shb.sops.secret."passphrase".result;
+    passphrase.result = config.shb.sops.secret."passphrase".result;
 
     repository = {
       path = "/srv/backups/myservice";
@@ -71,7 +72,7 @@ shb.restic.instances."myservice" = {
 };
 
 shb.sops.secret."passphrase".request =
-  shb.restic.instances."myservice".settings.passphrase.request;
+  config.shb.restic.instances."myservice".settings.passphrase.request;
 ```
 
 ### One folder backed up with contract {#blocks-restic-usage-provider-contract}
@@ -82,12 +83,12 @@ the snippet above becomes:
 
 ```nix
 shb.restic.instances."myservice" = {
-  request = config.myservice.backup;
+  request = config.myservice.backup.request;
 
   settings = {
     enable = true;
 
-    passphrase.result = shb.sops.secret."passphrase".result;
+    passphrase.result = config.shb.sops.secret."passphrase".result;
 
     repository = {
       path = "/srv/backups/myservice";
@@ -108,7 +109,7 @@ shb.restic.instances."myservice" = {
 };
 
 shb.sops.secret."passphrase".request =
-  shb.restic.instances."myservice".settings.passphrase.request;
+  config.shb.restic.instances."myservice".settings.passphrase.request;
 ```
 
 ### One folder backed up to S3 {#blocks-restic-usage-provider-remote}
@@ -229,11 +230,44 @@ See [Backups Dashboard and Alert](blocks-monitoring.html#blocks-monitoring-backu
 
 ## Maintenance {#blocks-restic-maintenance}
 
-One command-line helper is provided per backup instance and repository pair to automatically supply the needed secrets.
+### Manual Backup {#blocks-restic-maintenance-manuql}
+
+To launch a backup manually, just run:
+
+```bash
+systemctl start <systemd-service-name>
+```
+
+You can easily discover the systemd service name you need by either listing the units:
+
+```bash
+systemctl list-units 'restic*'
+```
+
+Or by autocompleting the unit name with `<TAB>`:
+
+```bash
+systemctl start restic<TAB><TAB>
+```
+
+Note that the systemd services are of `Type=simple` which means the systemd service
+will not wait for the backup completion to terminate.
+If you want instead to wait for the backup to complete, use the `--wait` flag:
+
+```bash
+systemctl start --wait <systemd-service-name>
+```
+
+### Restore {#blocks-restic-maintenance-restore}
+
+One command-line helper is provided per backup instance and repository pair which allows to:
+
+- list snapshots: `<script> snapshots`
+- to restore a snapshot: `<script> restore <snapshot>`
 
 The restore script has all the secrets needed to access the repo,
 it will run `sudo` automatically
-and the user running it needs to have correct permissions for privilege escalation
+and the user running it needs to have correct permissions for privilege escalation.
 
 In the [multiple directories example](#blocks-restic-usage-multiple) above, the following 6 helpers are provided in the `$PATH`:
 

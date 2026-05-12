@@ -44,16 +44,18 @@ in
 {
   imports = [
     ../blocks/nginx.nix
+    ../blocks/lldap.nix
 
     (lib.mkRemovedOptionModule [ "shb" "forgejo" "adminPassword" ] ''
       Instead, define an admin user in shb.forgejo.users and give it the same password, like so:
-            shb.forgejo.users = {
-              "forgejoadmin" = {
-                isAdmin = true;
-                email = "forgejoadmin@example.com";
-                password.result = <path/to/password>;
-              };
+
+          shb.forgejo.users = {
+            "forgejoadmin" = {
+              isAdmin = true;
+              email = "forgejoadmin@example.com";
+              password.result = <path/to/password>;
             };
+          };
     '')
   ];
 
@@ -233,6 +235,7 @@ in
 
     users = mkOption {
       description = "Users managed declaratively.";
+      default = { };
       type = attrsOf (submodule {
         options = {
           isAdmin = mkOption {
@@ -245,7 +248,7 @@ in
             description = ''
               Email of user.
 
-                          This is only set when the user is created, changing this later on will have no effect.
+              This is only set when the user is created, changing this later on will have no effect.
             '';
             type = str;
           };
@@ -331,7 +334,7 @@ in
         options = shb.contracts.backup.mkRequester {
           user = options.services.forgejo.user.value;
           sourceDirectories = [
-            options.services.forgejo.dump.backupDir.value
+            config.services.forgejo.dump.backupDir
           ]
           ++ optionals (cfg.repositoryRoot != null) [
             cfg.repositoryRoot
@@ -405,6 +408,21 @@ in
       type = bool;
       default = false;
     };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${cfg.subdomain}.${cfg.domain}";
+          externalUrlText = "https://\${config.shb.forgejo.subdomain}.\${config.shb.forgejo.domain}";
+          internalUrl = "https://${cfg.subdomain}.${cfg.domain}";
+          internalUrlText = "https://\${config.shb.forgejo.subdomain}.\${config.shb.forgejo.domain}";
+        };
+      };
+    };
   };
 
   config = mkMerge [
@@ -468,6 +486,12 @@ in
     (mkIf (cfg.enable && cfg.ldap.enable != false) {
       systemd.services.forgejo.wants = cfg.ldap.waitForSystemdServices;
       systemd.services.forgejo.after = cfg.ldap.waitForSystemdServices;
+
+      shb.lldap.ensureGroups = {
+        ${cfg.ldap.adminGroup} = { };
+        ${cfg.ldap.userGroup} = { };
+      };
+
       # The delimiter in the `cut` command is a TAB!
       systemd.services.forgejo.preStart =
         let
@@ -493,7 +517,7 @@ in
               --bind-password       $(tr -d '\n' < ${cfg.ldap.adminPassword.result.path}) \
               --security-protocol   Unencrypted \
               --user-search-base    ou=people,${cfg.ldap.dcdomain} \
-              --user-filter         '(&(memberof=cn=${cfg.ldap.userGroup},ou=groups,${cfg.ldap.dcdomain})(|(uid=%[1]s)(mail=%[1]s)))' \
+              --user-filter         '(&(|(memberof=cn=${cfg.ldap.userGroup},ou=groups,${cfg.ldap.dcdomain})(memberof=cn=${cfg.ldap.adminGroup},ou=groups,${cfg.ldap.dcdomain}))(|(uid=%[1]s)(mail=%[1]s)))' \
               --admin-filter        '(memberof=cn=${cfg.ldap.adminGroup},ou=groups,${cfg.ldap.dcdomain})' \
               --username-attribute  uid \
               --firstname-attribute givenName \
@@ -512,7 +536,7 @@ in
               --bind-password       $(tr -d '\n' < ${cfg.ldap.adminPassword.result.path}) \
               --security-protocol   Unencrypted \
               --user-search-base    ou=people,${cfg.ldap.dcdomain} \
-              --user-filter         '(&(memberof=cn=${cfg.ldap.userGroup},ou=groups,${cfg.ldap.dcdomain})(|(uid=%[1]s)(mail=%[1]s)))' \
+              --user-filter         '(&(|(memberof=cn=${cfg.ldap.userGroup},ou=groups,${cfg.ldap.dcdomain})(memberof=cn=${cfg.ldap.adminGroup},ou=groups,${cfg.ldap.dcdomain}))(|(uid=%[1]s)(mail=%[1]s)))' \
               --admin-filter        '(memberof=cn=${cfg.ldap.adminGroup},ou=groups,${cfg.ldap.dcdomain})' \
               --username-attribute  uid \
               --firstname-attribute givenName \
@@ -529,6 +553,13 @@ in
     # For Forgejo config: https://forgejo.org/docs/latest/admin/config-cheat-sheet
     # For cli info: https://docs.gitea.com/usage/command-line
     (mkIf (cfg.enable && cfg.sso.enable != false) {
+      assertions = [
+        {
+          assertion = cfg.ldap.enable == true;
+          message = "'shb.forgejo.ldap.enable' must be set to true and ldap configured when 'shb.forgejo.sso.enable' is true. Otherwise you will never be able to register new accounts.";
+        }
+      ];
+
       services.forgejo.settings = {
         oauth2 = {
           ENABLED = true;
@@ -636,7 +667,7 @@ in
       };
 
       services.gitea-actions-runner = mkIf cfg.localActionRunner {
-        package = pkgs.forgejo-actions-runner;
+        package = pkgs.forgejo-runner;
         instances.local = {
           enable = true;
           name = "local";

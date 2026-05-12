@@ -63,7 +63,7 @@ let
             mode = "0400";
             owner = config.request.user;
             ownerText = "[shb.restic.${prefix}.<name>.request.user](#blocks-restic-options-shb.restic.${prefix}._name_.request.user)";
-            restartUnits = [ (fullName name config.settings.repository) ];
+            restartUnits = [ "${fullName name config.settings.repository}.service" ];
             restartUnitsText = "[ [shb.restic.${prefix}.<name>.settings.repository](#blocks-restic-options-shb.restic.${prefix}._name_.settings.repository) ]";
           };
         };
@@ -102,7 +102,7 @@ let
                 OnCalendar = "daily";
                 Persistent = true;
               };
-              description = ''When to run the backup. See {manpage}`systemd.timer(5)` for details.'';
+              description = "When to run the backup. See {manpage}`systemd.timer(5)` for details.";
               example = {
                 OnCalendar = "00:05";
                 RandomizedDelaySec = "5h";
@@ -149,9 +149,14 @@ in
 {
   imports = [
     ../../lib/module.nix
+    ../blocks/monitoring.nix
   ];
 
   options.shb.restic = {
+    enableDashboard = lib.mkEnableOption "the Backups SHB dashboard" // {
+      default = true;
+    };
+
     instances = mkOption {
       description = "Files to backup following the [backup contract](./shb.contracts-backup.html).";
       default = { };
@@ -408,7 +413,13 @@ in
               nameValuePair "${fullName name instance.settings.repository}_restore_gen" {
                 enable = true;
                 wantedBy = [ "multi-user.target" ];
-                serviceConfig.Type = "oneshot";
+                # Purposely not a oneshot systemd service otherwise
+                # the service waits on the completion the backup before deactivating.
+                # This seems like a nice property at first but there is one annoying
+                # edge case when deploying. If a backup job somehow is started when
+                # the deploy happens, the deploy will wait on the service to finish
+                # before considering the deploy done. And worse, it will consider the
+                # deploy as failed if the backup fails, which is not what you want.
                 script = (
                   shb.replaceSecrets {
                     userConfig = instance.settings.repository.secrets // {
@@ -429,38 +440,16 @@ in
           let
             mkResticBinary =
               name: instance:
-              pkgs.writeShellApplication {
+              shb.contracts.backup.mkRestoreScript {
                 name = fullName name instance.settings.repository;
-                text = ''
-                  usage() {
-                    echo "$0 restore latest"
-                  }
-
-                  if ! [ "$1" = "restore" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  if ! [ "$1" = "latest" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  sudocmd() {
-                    sudo --preserve-env=RESTIC_REPOSITORY,RESTIC_PASSWORD_FILE -u ${instance.request.user} "$@"
-                  }
-
-                  set -a
-                  # shellcheck disable=SC1090
-                  source <(sudocmd cat "/run/secrets_restic_env/${fullName name instance.settings.repository}")
-                  set +a
-
-                  echo "Will restore archive 'latest'"
-
-                  sudocmd ${pkgs.restic}/bin/restic restore latest --target /
-                '';
+                user = instance.request.user;
+                sudoPreserveEnvs = [
+                  "RESTIC_REPOSITORY"
+                  "RESTIC_PASSWORD_FILE"
+                ];
+                secretsFile = "/run/secrets_restic_env/${fullName name instance.settings.repository}";
+                restoreCmd = ''${pkgs.restic}/bin/restic restore \"$snapshot\" --target /'';
+                listCmd = ''if [ -e \"$RESTIC_REPOSITORY/index\" ]; then ${pkgs.restic}/bin/restic snapshots --json | ${pkgs.jq}/bin/jq '.[].id'; fi'';
               };
           in
           flatten (mapAttrsToList mkResticBinary cfg.instances);
@@ -470,42 +459,26 @@ in
           let
             mkResticBinary =
               name: instance:
-              pkgs.writeShellApplication {
+              shb.contracts.backup.mkRestoreScript {
                 name = fullName name instance.settings.repository;
-                text = ''
-                  usage() {
-                    echo "$0 restore latest"
-                  }
-
-                  if ! [ "$1" = "restore" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  if ! [ "$1" = "latest" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  sudocmd() {
-                    sudo --preserve-env=RESTIC_REPOSITORY,RESTIC_PASSWORD_FILE -u ${instance.request.user} "$@"
-                  }
-
-                  set -a
-                  # shellcheck disable=SC1090
-                  source <(sudocmd cat "/run/secrets_restic_env/${fullName name instance.settings.repository}")
-                  set +a
-
-                  echo "Will restore archive 'latest'"
-
-                  sudocmd sh -c "${pkgs.restic}/bin/restic dump latest ${instance.request.backupName} | ${instance.request.restoreCmd}"
-                '';
+                user = instance.request.user;
+                sudoPreserveEnvs = [
+                  "RESTIC_REPOSITORY"
+                  "RESTIC_PASSWORD_FILE"
+                ];
+                secretsFile = "/run/secrets_restic_env/${fullName name instance.settings.repository}";
+                restoreCmd = ''${pkgs.restic}/bin/restic dump \"$snapshot\" ${instance.request.backupName} | ${instance.request.restoreCmd}'';
+                listCmd = ''if [ -e \"$RESTIC_REPOSITORY/index\" ]; then ${pkgs.restic}/bin/restic snapshots --json | ${pkgs.jq}/bin/jq '.[].id'; fi'';
               };
           in
           flatten (mapAttrsToList mkResticBinary cfg.databases);
       }
+
+      (lib.mkIf (cfg.enableDashboard && (cfg.instances != { } || cfg.databases != { })) {
+        shb.monitoring.dashboards = [
+          ./backup/dashboard/Backups.json
+        ];
+      })
     ]
   );
 }

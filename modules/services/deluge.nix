@@ -30,10 +30,15 @@ in
   imports = [
     ../../lib/module.nix
     ../blocks/nginx.nix
+    ../blocks/monitoring.nix
   ];
 
   options.shb.deluge = {
-    enable = lib.mkEnableOption "selfhostblocks.deluge";
+    enable = lib.mkEnableOption "the SHB Deluge service";
+
+    enableDashboard = lib.mkEnableOption "the Torrents SHB monitoring dashboard" // {
+      default = true;
+    };
 
     subdomain = lib.mkOption {
       type = lib.types.str;
@@ -296,6 +301,20 @@ in
       default = null;
       example = "info";
     };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${fqdn}";
+          externalUrlText = "https://\${config.shb.deluge.subdomain}.\${config.shb.deluge.domain}";
+          internalUrl = "http://127.0.0.1:${toString cfg.webPort}";
+        };
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -450,6 +469,12 @@ in
               }
             ];
           }
+        ];
+      })
+
+      (lib.mkIf (cfg.enable && cfg.enableDashboard) {
+        shb.monitoring.dashboards = [
+          ./deluge/dashboard/Torrents.json
         ];
       })
     ]

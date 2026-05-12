@@ -61,7 +61,7 @@ jobs:
             keep-outputs = true
             keep-failed = true
       - name: Setup Caching
-        uses: cachix/cachix-action@v16
+        uses: cachix/cachix-action@v17
         with:
           name: selfhostblocks
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -93,7 +93,7 @@ jobs:
             keep-outputs = true
             keep-failed = true
       - name: Setup Caching
-        uses: cachix/cachix-action@v16
+        uses: cachix/cachix-action@v17
         with:
           name: selfhostblocks
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -124,7 +124,7 @@ jobs:
             keep-outputs = true
             keep-failed = true
       - name: Setup Caching
-        uses: cachix/cachix-action@v16
+        uses: cachix/cachix-action@v17
         with:
           name: selfhostblocks
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -133,7 +133,7 @@ jobs:
           echo "resultPath=$(nix eval .#checks.x86_64-linux.${{ matrix.check }} --raw)" >> $GITHUB_ENV
           nix build --print-build-logs --show-trace .#checks.x86_64-linux.${{ matrix.check }}
       - name: Upload Build Result
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always() && startsWith(matrix.check, 'vm_')
         with:
           name: ${{ matrix.check }}

@@ -27,8 +27,10 @@ let
 in
 {
   imports = [
+    ../../lib/module.nix
     ../blocks/authelia.nix
     ../blocks/lldap.nix
+    ../blocks/nginx.nix
   ];
 
   options.shb.monitoring = {
@@ -96,16 +98,45 @@ in
       default = 1;
     };
 
-    provisionDashboards = lib.mkOption {
-      type = lib.types.bool;
-      description = "Provision Self Host Blocks dashboards under 'Self Host Blocks' folder.";
-      default = true;
+    dashboards = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      description = "Dashboards to provision under 'Self Host Blocks' folder.";
+      default = [ ];
     };
 
     contactPoints = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = "List of email addresses to send alerts to";
       default = [ ];
+    };
+
+    scrutiny = {
+      enable = lib.mkEnableOption "scrutiny service" // {
+        default = true;
+      };
+      subdomain = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        description = ''
+          If a string, this will be the subdomain under which the scrutiny web interface will be servced.
+
+          If null, the web interface will not be served and only the prometheus metrics will be accessible.
+        '';
+        default = "scrutiny";
+      };
+      dashboard = lib.mkOption {
+        description = ''
+          Dashboard contract consumer
+        '';
+        default = { };
+        type = lib.types.submodule {
+          options = shb.contracts.dashboard.mkRequester {
+            externalUrl = "https://${cfg.scrutiny.subdomain}.${cfg.domain}";
+            externalUrlText = "https://\${config.shb.monitoring.scrutiny.subdomain}.\${config.shb.monitoring.domain}";
+            internalUrl = "http://127.0.0.1:${toString config.services.scrutiny.settings.web.listen.port}";
+            internalUrlText = "https://127.0.0.1.\${config.services.scrutiny.settings.web.listen.port}";
+          };
+        };
+      };
     };
 
     adminPassword = lib.mkOption {
@@ -247,13 +278,38 @@ in
         };
       };
     };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${cfg.subdomain}.${cfg.domain}";
+          externalUrlText = "https://\${config.shb.monitoring.subdomain}.\${config.shb.monitoring.domain}";
+          internalUrl = "https://${cfg.subdomain}.${cfg.domain}";
+          internalUrlText = "https://\${config.shb.monitoring.subdomain}.\${config.shb.monitoring.domain}";
+        };
+      };
+    };
+
+    impermanence = lib.mkOption {
+      description = ''
+        Paths to save when using impermanence setup.
+      '';
+      type = lib.types.attrsOf lib.types.str;
+      default = {
+        fluent-bit = "/var/fluent-bit";
+      };
+    };
   };
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
       assertions = [
         {
-          assertion = (!(isNull cfg.smtp)) -> builtins.length cfg.contactPoints > 0;
+          assertion = builtins.length cfg.contactPoints > 0;
           message = "Must have at least one contact point for alerting";
         }
       ];
@@ -302,14 +358,25 @@ in
           };
         };
       };
+    })
+
+    (lib.mkIf cfg.enable {
+      shb.monitoring.dashboards = [
+        ./monitoring/dashboards/Errors.json
+        ./monitoring/dashboards/Performance.json
+        ./monitoring/dashboards/Scraping_Jobs.json
+      ];
 
       services.grafana.provision = {
-        dashboards.settings = lib.mkIf cfg.provisionDashboards {
+        dashboards.settings = lib.mkIf (cfg.dashboards != [ ]) {
           apiVersion = 1;
           providers = [
             {
               folder = "Self Host Blocks";
-              options.path = ./monitoring/dashboards;
+              options.path = pkgs.symlinkJoin {
+                name = "dashboards";
+                paths = map (p: pkgs.runCommand "dashboard" { } "mkdir $out; cp ${p} $out") cfg.dashboards;
+              };
               allowUiUpdates = true;
               disableDeletion = true;
             }
@@ -400,10 +467,15 @@ in
             # any updates.
           };
       };
+    })
 
+    (lib.mkIf cfg.enable {
       services.prometheus = {
         enable = true;
         port = cfg.prometheusPort;
+        globalConfig = {
+          scrape_interval = "15s";
+        };
       };
 
       services.loki = {
@@ -513,41 +585,62 @@ in
         };
       };
 
-      services.promtail = {
+      # I decided to switch to fluent-bit because it can be tested locally https://docs.fluentbit.io/manual/local-testing/logging-pipeline
+      services.fluent-bit = {
         enable = true;
-        configuration = {
-          server = {
-            http_listen_port = 9080;
-            grpc_listen_port = 0;
+        settings = {
+          service = {
+            flush = 1;
+            log_level = "info";
+            http_server = "true";
+            http_listen = "127.0.0.1";
+            http_port = 9080;
+            grace = 30;
           };
 
-          positions.filename = "/tmp/positions.yaml";
+          pipeline = {
+            inputs = [
+              {
+                name = "systemd";
 
-          client.url = "http://localhost:${toString config.services.loki.configuration.server.http_listen_port}/api/prom/push";
+                # The asterisk appends the _SYSTEMD_UNIT to the prefix.
+                tag = "systemd.*";
 
-          scrape_configs = [
-            {
-              job_name = "systemd";
-              journal = {
-                json = false;
-                max_age = "12h";
+                # Read logs from this systemd journal directory.
                 path = "/var/log/journal";
-                # matches = "_TRANSPORT=kernel";
+
+                # Database file to keep track of the journald cursor.
+                db = "/var/fluent-bit/systemd.db";
+
+                # Start reading new entries. Skip entries already stored in journald.
+                read_from_tail = true;
+
+                # Max entries to lookback on start.
+                max_entries = 10000;
+              }
+            ];
+
+            outputs = [
+              {
+                name = "loki";
+
+                match = "systemd.*";
+
+                host = "localhost";
+                port = config.services.loki.configuration.server.http_listen_port;
+
                 labels = {
+                  job = "systemd-journal";
                   domain = cfg.domain;
                   hostname = config.networking.hostName;
-                  job = "systemd-journal";
                 };
-              };
-              relabel_configs = [
-                {
-                  source_labels = [ "__journal__systemd_unit" ];
-                  target_label = "unit";
-                }
-              ];
-            }
-          ];
+
+                label_keys = "unit";
+              }
+            ];
+          };
         };
+        graceLimit = "1m";
       };
 
       services.nginx = {
@@ -567,7 +660,9 @@ in
           };
         };
       };
+    })
 
+    (lib.mkIf cfg.enable {
       services.prometheus.scrapeConfigs = [
         {
           job_name = "node";
@@ -817,6 +912,78 @@ in
           response_types = [ "code" ];
           token_endpoint_auth_method = "client_secret_basic";
         }
+      ];
+    })
+
+    (lib.mkIf (cfg.enable && cfg.scrutiny.enable) {
+      services.scrutiny = {
+        enable = true;
+
+        openFirewall = false;
+
+        # This src includes Prometheus metrics exporter.
+        package = pkgs.scrutiny.overrideAttrs ({
+          src = pkgs.fetchFromGitHub {
+            owner = "ibizaman";
+            repo = "scrutiny";
+            rev = "74faf06f77df83f29e7e1806cd88b2fafc0bbb82";
+            hash = "sha256-r0AVWL+E046xHxitwMPfRNTOpjuOk+W6tB41YgmLTPg=";
+          };
+
+          vendorHash = "sha256-kAlnlWnBMFCdgdak5L5hRquRtyLi5MTmDa/kxwqPs4E=";
+        });
+
+        settings = {
+          web = {
+            metrics.enabled = true; # Enables Prometheus exporter
+            listenHost = "127.0.0.1";
+          };
+        };
+
+        collector = {
+          enable = true;
+        };
+      };
+
+      services.prometheus.scrapeConfigs = [
+        {
+          job_name = "scrutiny";
+          metrics_path = "/api/metrics";
+          static_configs = [
+            {
+              targets = [ "127.0.0.1:${toString config.services.scrutiny.settings.web.listen.port}" ];
+              labels = commonLabels;
+            }
+          ];
+        }
+      ];
+
+      shb.monitoring.dashboards = [
+        ./monitoring/dashboards/Health.json
+      ];
+
+      shb.nginx.vhosts = lib.mkIf (cfg.scrutiny.subdomain != null) [
+        (
+          {
+            inherit (cfg) domain ssl;
+            subdomain = cfg.scrutiny.subdomain;
+
+            upstream = "http://127.0.0.1:${toString config.services.scrutiny.settings.web.listen.port}";
+            autheliaRules = lib.optionals (cfg.sso.enable) [
+              {
+                domain = "${cfg.subdomain}.${cfg.domain}";
+                policy = cfg.sso.authorization_policy;
+                subject = [
+                  "group:${cfg.ldap.userGroup}"
+                  "group:${cfg.ldap.adminGroup}"
+                ];
+              }
+            ];
+          }
+          // lib.optionalAttrs cfg.sso.enable {
+            inherit (cfg.sso) authEndpoint;
+          }
+        )
       ];
     })
   ];

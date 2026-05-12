@@ -144,6 +144,22 @@ in
       default = 2283;
     };
 
+    publicProxyEnable = mkOption {
+      description = ''
+        Enable Immich Public Proxy service for sharing media publically.
+      '';
+      type = bool;
+      default = false;
+    };
+
+    publicProxyPort = mkOption {
+      description = ''
+        Port under which Immich Public Proxy will listen.
+      '';
+      type = port;
+      default = 2284;
+    };
+
     ssl = mkOption {
       description = "Path to SSL files";
       type = nullOr shb.contracts.ssl.certs;
@@ -449,6 +465,20 @@ in
       default = false;
       example = true;
     };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = lib.types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${fqdn}";
+          externalUrlText = "https://\${config.shb.immich.subdomain}.\${config.shb.immich.domain}";
+          internalUrl = "http://127.0.0.1:${toString cfg.port}";
+        };
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -475,12 +505,6 @@ in
 
       # Database configuration defaults to Unix socket /run/postgresql
 
-      # Database configuration
-      database = {
-        # Disable pgvecto.rs, as it was deprecated before SHB integration
-        enableVectors = false;
-      };
-
       # Machine learning configuration
       machine-learning = mkIf cfg.machineLearning.enable {
         enable = true;
@@ -500,6 +524,12 @@ in
       // lib.optionalAttrs (cfg.settings != { } || cfg.sso.enable || cfg.smtp != null) {
         IMMICH_CONFIG_FILE = configFile;
       };
+    };
+
+    services.immich-public-proxy = mkIf (cfg.publicProxyEnable) {
+      enable = true;
+      port = cfg.publicProxyPort;
+      immichUrl = "https://${fqdn}";
     };
 
     # Create basic directories for Immich
@@ -550,6 +580,8 @@ in
             resources = [
               "^/api.*"
               "^/.well-known/immich"
+              "^/share.*"
+              "^/_app/immutable/.*"
             ];
           }
           {
@@ -572,9 +604,15 @@ in
     ];
 
     # Allow large uploads from mobile app
-    services.nginx.virtualHosts."${fqdn}".extraConfig = ''
-      client_max_body_size 50G;
-    '';
+    services.nginx.virtualHosts."${fqdn}" = {
+      extraConfig = ''
+        client_max_body_size 50G;
+      '';
+      locations."^~ /share" = {
+        recommendedProxySettings = true;
+        proxyPass = "http://127.0.0.1:${toString cfg.publicProxyPort}";
+      };
+    };
 
     # Ensure services start in correct order
     systemd.services.immich-server = {

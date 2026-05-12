@@ -17,6 +17,7 @@ LDAP and SSO integration as well as one local runner.
 - Access through [subdomain](#services-forgejo-options-shb.forgejo.subdomain) using reverse proxy. [Manual](#services-forgejo-usage-configuration).
 - Access through [HTTPS](#services-forgejo-options-shb.forgejo.ssl) using reverse proxy. [Manual](#services-forgejo-usage-configuration).
 - [Backup](#services-forgejo-options-shb.forgejo.sso) through the [backup block](./blocks-backup.html). [Manual](#services-forgejo-usage-backup).
+- Integration with the [dashboard contract](contracts-dashboard.html) for displaying user facing application in a dashboard. [Manual](#services-forgejo-usage-applicationdashboard)
 
 ## Usage {#services-forgejo-usage}
 
@@ -34,20 +35,20 @@ shb.forgejo = {
     "theadmin" = {
       isAdmin = true;
       email = "theadmin@example.com";
-      password.result = config.shb.sops.secrets.forgejoAdminPassword.result;
+      password.result = config.shb.sops.secret.forgejoAdminPassword.result;
     };
     "theuser" = {
       email = "theuser@example.com";
-      password.result = config.shb.sops.secrets.forgejoUserPassword.result;
+      password.result = config.shb.sops.secret.forgejoUserPassword.result;
     };
   };
 };
 
-shb.sops.secrets."forgejo/admin/password" = {
+shb.sops.secret."forgejo/admin/password" = {
   request = config.shb.forgejo.users."theadmin".password.request;
 };
 
-shb.sops.secrets."forgejo/user/password" = {
+shb.sops.secret."forgejo/user/password" = {
   request = config.shb.forgejo.users."theuser".password.request;
 };
 ```
@@ -110,10 +111,10 @@ shb.forgejo.ldap = {
   host = "127.0.0.1";
   port = config.shb.lldap.ldapPort;
   dcdomain = config.shb.lldap.dcdomain;
-  adminPassword.result = config.shb.sops.secrets."forgejo/ldap/adminPassword".result
+  adminPassword.result = config.shb.sops.secret."forgejo/ldap/adminPassword".result
 };
 
-shb.sops.secrets."forgejo/ldap/adminPassword" = {
+shb.sops.secret."forgejo/ldap/adminPassword" = {
   request = config.shb.forgejo.ldap.adminPassword.request;
   settings.key = "ldap/userPassword";
 };
@@ -205,6 +206,22 @@ shb.restic.instances."forgejo" = {
 The name `"forgejo"` in the `instances` can be anything.
 The `config.shb.forgejo.backup` option provides what directories to backup.
 You can define any number of Restic instances to backup Forgejo multiple times.
+
+### Application Dashboard {#services-forgejo-usage-applicationdashboard}
+
+Integration with the [dashboard contract](contracts-dashboard.html) is provided
+by the [dashboard option](#services-forgejo-options-shb.forgejo.dashboard).
+
+For example using the [Homepage](services-homepage.html) service:
+
+```nix
+{
+  shb.homepage.servicesGroups.Admin.services.Forgejo = {
+    sortOrder = 1;
+    dashboard.request = config.shb.forgejo.dashboard.request;
+  };
+}
+```
 
 ### Extra Settings {#services-forgejo-usage-extra-settings}
 

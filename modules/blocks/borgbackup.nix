@@ -98,7 +98,7 @@ let
                 OnCalendar = "daily";
                 Persistent = true;
               };
-              description = ''When to run the backup. See {manpage}`systemd.timer(5)` for details.'';
+              description = "When to run the backup. See {manpage}`systemd.timer(5)` for details.";
               example = {
                 OnCalendar = "00:05";
                 RandomizedDelaySec = "5h";
@@ -158,9 +158,14 @@ in
 {
   imports = [
     ../../lib/module.nix
+    ../blocks/monitoring.nix
   ];
 
   options.shb.borgbackup = {
+    enableDashboard = lib.mkEnableOption "the Backups SHB dashboard" // {
+      default = true;
+    };
+
     instances = mkOption {
       description = "Files to backup following the [backup contract](./shb.contracts-backup.html).";
       default = { };
@@ -381,8 +386,13 @@ in
                 ${serviceName} = mkMerge [
                   {
                     serviceConfig = {
-                      # Makes the systemd service wait for the backup to be done before changing state to inactive.
-                      Type = "oneshot";
+                      # Purposely not a oneshot systemd service otherwise
+                      # the service waits on the completion the backup before deactivating.
+                      # This seems like a nice property at first but there is one annoying
+                      # edge case when deploying. If a backup job somehow is started when
+                      # the deploy happens, the deploy will wait on the service to finish
+                      # before considering the deploy done. And worse, it will consider the
+                      # deploy as failed if the backup fails, which is not what you want.
                       Nice = lib.mkForce cfg.performance.niceness;
                       IOSchedulingClass = lib.mkForce cfg.performance.ioSchedulingClass;
                       IOSchedulingPriority = lib.mkForce cfg.performance.ioPriority;
@@ -409,6 +419,7 @@ in
                   in
                   {
                     script = script.preStart;
+                    # Makes the systemd service wait for the backup to be done before changing state to inactive.
                     serviceConfig.Type = "oneshot";
                     serviceConfig.LoadCredential = script.loadCredentials;
                   }
@@ -446,39 +457,16 @@ in
           let
             mkBorgBackupBinary =
               name: instance:
-              pkgs.writeShellApplication {
+              shb.contracts.backup.mkRestoreScript {
                 name = fullName name instance.settings.repository;
-                text = ''
-                  usage() {
-                    echo "$0 restore latest"
-                  }
-
-                  if ! [ "$1" = "restore" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  if ! [ "$1" = "latest" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  sudocmd() {
-                    sudo --preserve-env=BORG_REPO,BORG_PASSCOMMAND -u ${instance.request.user} "$@"
-                  }
-
-                  set -a
-                  # shellcheck disable=SC1090
-                  source <(sudocmd cat "/run/secrets_borgbackup_env/${fullName name instance.settings.repository}")
-                  set +a
-
-                  archive="$(sudocmd borg list --short "$BORG_REPO" | tail -n 1)"
-                  echo "Will restore archive $archive"
-
-                  (cd / && sudocmd ${pkgs.borgbackup}/bin/borg extract "$BORG_REPO"::"$archive")
-                '';
+                user = instance.request.user;
+                sudoPreserveEnvs = [
+                  "BORG_REPO"
+                  "BORG_PASSCOMMAND"
+                ];
+                secretsFile = "/run/secrets_borgbackup_env/${fullName name instance.settings.repository}";
+                restoreCmd = ''(cd / && ${pkgs.borgbackup}/bin/borg extract \"$BORG_REPO::$snapshot\")'';
+                listCmd = ''if [ -e \"$BORG_REPO/data\" ]; then borg list --short \"$BORG_REPO\"; fi'';
               };
           in
           flatten (mapAttrsToList mkBorgBackupBinary cfg.instances);
@@ -488,43 +476,26 @@ in
           let
             mkBorgBackupBinary =
               name: instance:
-              pkgs.writeShellApplication {
+              shb.contracts.backup.mkRestoreScript {
                 name = fullName name instance.settings.repository;
-                text = ''
-                  usage() {
-                    echo "$0 restore latest"
-                  }
-
-                  if ! [ "$1" = "restore" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  if ! [ "$1" = "latest" ]; then
-                    usage
-                    exit 1
-                  fi
-                  shift
-
-                  sudocmd() {
-                    sudo --preserve-env=BORG_REPO,BORG_PASSCOMMAND -u ${instance.request.user} "$@"
-                  }
-
-                  set -a
-                  # shellcheck disable=SC1090
-                  source <(sudocmd cat "/run/secrets_borgbackup_env/${fullName name instance.settings.repository}")
-                  set +a
-
-                  archive="$(sudocmd borg list --short "$BORG_REPO" | tail -n 1)"
-                  echo "Will restore archive $archive"
-
-                  sudocmd sh -c "${pkgs.borgbackup}/bin/borg extract $BORG_REPO::$archive --stdout | ${instance.request.restoreCmd}"
-                '';
+                user = instance.request.user;
+                sudoPreserveEnvs = [
+                  "BORG_REPO"
+                  "BORG_PASSCOMMAND"
+                ];
+                secretsFile = "/run/secrets_borgbackup_env/${fullName name instance.settings.repository}";
+                restoreCmd = ''${pkgs.borgbackup}/bin/borg extract \"$BORG_REPO::$snapshot\" --stdout | ${instance.request.restoreCmd}'';
+                listCmd = ''if [ -e \"$BORG_REPO/data\" ]; then borg list --short \"$BORG_REPO\"; fi'';
               };
           in
           flatten (mapAttrsToList mkBorgBackupBinary cfg.databases);
       }
+
+      (lib.mkIf (cfg.enableDashboard && (cfg.instances != { } || cfg.databases != { })) {
+        shb.monitoring.dashboards = [
+          ./backup/dashboard/Backups.json
+        ];
+      })
     ]
   );
 }

@@ -8,10 +8,17 @@ This block sets up an [Authelia][] service for Single-Sign On integration.
 
 Compared to the upstream nixpkgs module, this module is tightly integrated
 with SHB which allows easy configuration of SSO with [OIDC integration](#blocks-authelia-shb-oidc)
-or with [forward auth integration](#blocks-authelia-shb-forward-auth)
 as well as some extensive [troubleshooting](#blocks-authelia-troubleshooting) features.
 
-## Global Setup {#blocks-authelia-global-setup}
+Note that forward authentication is configured with the [nginx block](blocks-nginx.html#blocks-nginx-usage-shbforwardauth).
+
+## Features {#services-authelia-features}
+
+- Integration with the [dashboard contract](contracts-dashboard.html) for displaying user facing application in a dashboard. [Manual](#services-authelia-usage-applicationdashboard)
+
+## Usage {#services-authelia-usage}
+
+### Initial Configuration {#blocks-authelia-usage-configuration}
 
 Authelia cannot work without SSL and LDAP.
 So setting up the Authelia block requires to setup the [SSL block][] first
@@ -43,31 +50,31 @@ shb.authelia = {
     port = 587;
     username = "postmaster@mg.example.com";
     from_address = "authelia@example.com";
-    password.result = config.shb.sops.secrets."authelia/smtp_password".result;
+    password.result = config.shb.sops.secret."authelia/smtp_password".result;
   };
 
   secrets = {
-    jwtSecret.result = config.shb.sops.secrets."authelia/jwt_secret".result;
-    ldapAdminPassword.result = config.shb.sops.secrets."authelia/ldap_admin_password".result;
-    sessionSecret.result = config.shb.sops.secrets."authelia/session_secret".result;
-    storageEncryptionKey.result = config.shb.sops.secrets."authelia/storage_encryption_key".result;
-    identityProvidersOIDCHMACSecret.result = config.shb.sops.secrets."authelia/hmac_secret".result;
-    identityProvidersOIDCIssuerPrivateKey.result = config.shb.sops.secrets."authelia/private_key".result;
+    jwtSecret.result = config.shb.sops.secret."authelia/jwt_secret".result;
+    ldapAdminPassword.result = config.shb.sops.secret."authelia/ldap_admin_password".result;
+    sessionSecret.result = config.shb.sops.secret."authelia/session_secret".result;
+    storageEncryptionKey.result = config.shb.sops.secret."authelia/storage_encryption_key".result;
+    identityProvidersOIDCHMACSecret.result = config.shb.sops.secret."authelia/hmac_secret".result;
+    identityProvidersOIDCIssuerPrivateKey.result = config.shb.sops.secret."authelia/private_key".result;
   };
 };
 
 shb.certs.certs.letsencrypt."example.com".extraDomains = [ "auth.example.com" ];
 
-shb.sops.secrets."authelia/jwt_secret".request = config.shb.authelia.secrets.jwtSecret.request;
-shb.sops.secrets."authelia/ldap_admin_password" = {
+shb.sops.secret."authelia/jwt_secret".request = config.shb.authelia.secrets.jwtSecret.request;
+shb.sops.secret."authelia/ldap_admin_password" = {
   request = config.shb.authelia.secrets.ldapAdminPassword.request;
   settings.key = "lldap/user_password";
 };
-shb.sops.secrets."authelia/session_secret".request = config.shb.authelia.secrets.sessionSecret.request;
-shb.sops.secrets."authelia/storage_encryption_key".request = config.shb.authelia.secrets.storageEncryptionKey.request;
-shb.sops.secrets."authelia/hmac_secret".request = config.shb.authelia.secrets.identityProvidersOIDCHMACSecret.request;
-shb.sops.secrets."authelia/private_key".request = config.shb.authelia.secrets.identityProvidersOIDCIssuerPrivateKey.request;
-shb.sops.secrets."authelia/smtp_password".request = config.shb.authelia.smtp.password.request;
+shb.sops.secret."authelia/session_secret".request = config.shb.authelia.secrets.sessionSecret.request;
+shb.sops.secret."authelia/storage_encryption_key".request = config.shb.authelia.secrets.storageEncryptionKey.request;
+shb.sops.secret."authelia/hmac_secret".request = config.shb.authelia.secrets.identityProvidersOIDCHMACSecret.request;
+shb.sops.secret."authelia/private_key".request = config.shb.authelia.secrets.identityProvidersOIDCIssuerPrivateKey.request;
+shb.sops.secret."authelia/smtp_password".request = config.shb.authelia.smtp.password.request;
 ```
 
 This assumes secrets are setup with SOPS
@@ -78,6 +85,22 @@ Use `nix run nixpkgs#openssl -- rand -hex 64` to generate them.
 Crucially, the `shb.authelia.secrets.ldapAdminPasswordFile` must be the same
 as the `shb.lldap.ldapUserPassword` defined for the [LLDAP block][].
 This is done using Sops' `key` option.
+
+### Application Dashboard {#services-authelia-usage-applicationdashboard}
+
+Integration with the [dashboard contract](contracts-dashboard.html) is provided
+by the [dashboard option](#blocks-authelia-options-shb.authelia.dashboard).
+
+For example using the [Homepage](services-homepage.html) service:
+
+```nix
+{
+  shb.homepage.servicesGroups.Admin.services.Authelia = {
+    sortOrder = 2;
+    dashboard.request = config.shb.authelia.dashboard.request;
+  };
+}
+```
 
 ## SHB OIDC integration {#blocks-authelia-shb-oidc}
 
@@ -94,8 +117,8 @@ shb.<service>.sso = {
   enable = true;
   endpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
 
-  secret.result = config.shb.sops.secrets."<service>/sso/secret".result;
-  secretForAuthelia.result = config.shb.sops.secrets."<service>/sso/secretForAuthelia".result;
+  secret.result = config.shb.sops.secret."<service>/sso/secret".result;
+  secretForAuthelia.result = config.shb.sops.secret."<service>/sso/secretForAuthelia".result;
 };
 
 shb.sops.secret."<service>/sso/secret".request = config.shb.<service>.sso.secret.request;
@@ -121,7 +144,7 @@ the necessary configuration is:
 shb.authelia.oidcClients = [
   {
     client_id = "<service>";
-    client_secret.source = shb.sops.secret."<service>/sso/secretForAuthelia".response.path;
+    client_secret.source = config.shb.sops.secret."<service>/sso/secretForAuthelia".response.path;
     scopes = [ "openid" "email" "profile" ];
     redirect_uris = [
       "<provided by service documentation>"
@@ -166,7 +189,7 @@ services.open-webui.environment = {
 shb.authelia.oidcClients = [
   {
     client_id = "open-webui";
-    client_secret.source = shb.sops.secret."open-webui/sso/secretForAuthelia".response.path;
+    client_secret.source = config.shb.sops.secret."open-webui/sso/secretForAuthelia".response.path;
     scopes = [ "openid" "email" "profile" ];
     redirect_uris = [
       "<provided by service documentation>"
@@ -191,40 +214,9 @@ Inspiration can be taken from SelfHostBlocks' source code.
 To access the UI, we will need to create an `open-webui_user` and
 `open-webui_admin` LDAP group and assign our user to it.
 
-## SHB Forward Auth {#blocks-authelia-shb-forward-auth}
-
-For services provided by SelfHostBlocks that do not handle [OIDC integration][OIDC],
-this block can provide [forward authentication][] which still allows the service to be protected by Authelia.
-
-The user could still be required to authenticate to the service itself,
-although some services can automatically users authorized by Authelia.
-
-[forward authentication]: https://doc.traefik.io/traefik/middlewares/http/forwardauth/
-
-Integrating with this block is done with the following code:
-
-```nix
-shb.<services>.authEndpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
-```
-
 ## Forward Auth {#blocks-authelia-forward-auth}
 
-To integrate a service that does not handle OIDC integration
-and which is not provided by SelfHostBlocks with this Authelia block,
-the necessary configuration is:
-
-```nix
-shb.nginx.vhosts = [
-  {
-    subdomain = "<service>";
-    domain = "example.com";
-    ssl = config.shb.certs.certs.letsencrypt."example.com";
-    upstream = "http://127.0.0.1:${toString config.services.<service>.port}/";
-  }
-];
-```
-
-This configuration assumes usage of the [SSL block][].
+Forward authentication is provided by the [nginx block](blocks-nginx.html#blocks-nginx-usage-ssl).
 
 ## Troubleshooting {#blocks-authelia-troubleshooting}
 

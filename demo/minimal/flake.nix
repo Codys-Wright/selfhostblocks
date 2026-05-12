@@ -24,7 +24,10 @@
           # This module makes the assertions happy and the build succeed.
           # This is of course wrong and will not work on any real system.
           filesystemModule = {
-            fileSystems."/".device = "/dev/null";
+            fileSystems."/" = {
+              device = "/dev/null";
+              fsType = "none";
+            };
             boot.loader.grub.devices = [ "/dev/null" ];
           };
         in
@@ -159,6 +162,40 @@
                 selfhostblocks.nixosModules.default
                 filesystemModule
                 # This modules showcases the use of SHB's lib.
+                (
+                  {
+                    config,
+                    lib,
+                    shb,
+                    ...
+                  }:
+                  {
+                    options.myOption = lib.mkOption {
+                      # Using provided nixosSystem directly.
+                      # SHB's lib is available under `shb` thanks to the overlay.
+                      type = shb.secretFileType;
+                    };
+                    config = {
+                      myOption.source = "/a/path";
+                      # Use the option.
+                      environment.etc.myOption.text = config.myOption.source;
+                    };
+                  }
+                )
+              ];
+            };
+
+          # Test with:
+          #   nix build .#nixosConfigurations.contractsDirect.config.system.build.toplevel
+          contractsDirect =
+            let
+              nixosSystem' = import "${selfhostblocks.inputs.nixpkgs}/nixos/lib/eval-config.nix";
+            in
+            nixosSystem' {
+              inherit system;
+              modules = [
+                filesystemModule
+                (import "${selfhostblocks}/lib/module.nix")
                 (
                   {
                     config,

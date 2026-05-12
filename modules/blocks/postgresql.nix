@@ -73,7 +73,7 @@ in
           backupName = "postgres.sql";
 
           backupCmd = ''
-            ${pkgs.postgresql}/bin/pg_dumpall | ${pkgs.gzip}/bin/gzip --rsyncable
+            ${pkgs.postgresql}/bin/pg_dumpall --clean --if-exists | ${pkgs.gzip}/bin/gzip --rsyncable
           '';
 
           restoreCmd = ''
@@ -162,7 +162,7 @@ in
               { username, passwordFile, ... }:
               ''
                 password := trim(both from replace(pg_read_file('${passwordFile}'), E'\n', '''));
-                EXECUTE format('ALTER ROLE ${username} WITH PASSWORD '''%s''';', password);
+                EXECUTE format('ALTER ROLE "${username}" WITH PASSWORD '''%s''';', password);
               '';
             cfgsWithPasswords = builtins.filter (cfg: cfg.passwordFile != null) ensureCfgs;
           in

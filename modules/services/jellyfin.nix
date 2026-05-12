@@ -13,30 +13,37 @@ let
 
   fqdn = "${cfg.subdomain}.${cfg.domain}";
 
-  jellyfin-cli = pkgs.buildDotnetModule rec {
-    pname = "jellyfin-cli";
-    version = "10.10.7";
+  jellyfin = pkgs.buildDotnetModule rec {
+    pname = "jellyfin";
+    version = "10.11.6";
 
     src = pkgs.fetchFromGitHub {
       owner = "ibizaman";
       repo = "jellyfin";
-      rev = "0b1a5d929960f852dba90c1fc36f3a19dc094f8d";
-      hash = "sha256-H9V65+886EYMn/xDEgmxvoEOrbZaI1wSfmkN9vAzGhw=";
+      rev = "c58ca41d9ee76d137be788cd6f2d089e288ad561";
+      hash = "sha256-gTHsz5qRT+9FjAqBb4hDBkHChYDU52snBWu6cQb10i4=";
     };
 
     propagatedBuildInputs = [ pkgs.sqlite ];
 
-    projectFile = "Jellyfin.Cli/Jellyfin.Cli.csproj";
-    executables = [ "jellyfin-cli" ];
+    projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
+    executables = [ "jellyfin" ];
     nugetDeps = "${pkgs.path}/pkgs/by-name/je/jellyfin/nuget-deps.json";
     runtimeDeps = [
       pkgs.jellyfin-ffmpeg
       pkgs.fontconfig
       pkgs.freetype
     ];
-    dotnet-sdk = pkgs.dotnetCorePackages.sdk_8_0;
-    dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_8_0;
+    dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0;
+    dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_9_0;
     dotnetBuildFlags = [ "--no-self-contained" ];
+
+    makeWrapperArgs = [
+      "--append-flags"
+      "--ffmpeg=${pkgs.jellyfin-ffmpeg}/bin/ffmpeg"
+      "--append-flags"
+      "--webdir=${pkgs.jellyfin-web}/share/jellyfin-web"
+    ];
 
     passthru.tests = {
       smoke-test = pkgs.nixosTests.jellyfin;
@@ -53,10 +60,24 @@ let
         purcell
         jojosch
       ];
-      mainProgram = "jellyfin-cli";
+      mainProgram = "jellyfin";
       platforms = dotnet-runtime.meta.platforms;
     };
   };
+
+  pluginName =
+    src:
+    let
+      meta = builtins.fromJSON (builtins.readFile "${src}/meta.json");
+    in
+    "${meta.name}_${meta.version}";
+
+  pluginNamePrefix =
+    src:
+    let
+      meta = builtins.fromJSON (builtins.readFile "${src}/meta.json");
+    in
+    "${meta.name}";
 in
 {
   options.shb.jellyfin = {
@@ -119,12 +140,47 @@ in
       );
     };
 
+    plugins = lib.mkOption {
+      description = ''
+        Install plugins declaratively.
+
+        The LDAP and SSO plugins will be added if their respective
+        shb.jellyfin.ldap.enable and shb.jellyfin.sso.enable options are set to true.
+
+        The interface for plugin creation is WIP.
+        Feel free to add yours following the examples from the LDAP and SSO plugins
+        but know that they may require some tweaks later on.
+        Notably, configuration is not yet handled by this option
+        so that will be added in the future.
+
+        Each plugin's meta.json must be writeable because Jellyfin appends some information
+        upon installing the plugin, like its active or disabled status.
+        SHB automatically enables the plugin
+        and deletes any plugin with the same prefix but other versions.
+        Note that SHB does not attempt to find which version is latest.
+        If twice the same plugin is added, the last one in the "plugins" list wins.
+      '';
+      default = [ ];
+      type = types.listOf types.package;
+    };
+
     ldap = lib.mkOption {
       description = "LDAP configuration.";
       default = { };
       type = types.submodule {
         options = {
           enable = lib.mkEnableOption "LDAP";
+
+          plugin = lib.mkOption {
+            type = lib.types.package;
+            description = "Pluging used for LDAP authentication.";
+            default = shb.mkJellyfinPlugin (rec {
+              pname = "jellyfin-plugin-ldapauth";
+              version = "22";
+              url = "https://github.com/jellyfin/${pname}/releases/download/v${version}/ldap-authentication_${version}.0.0.0.zip";
+              hash = "sha256-m2oD9woEuoSRiV9OeifAxZN7XQULMKS0Yq4TF+LjjpI=";
+            });
+          };
 
           host = lib.mkOption {
             type = types.str;
@@ -178,6 +234,17 @@ in
         options = {
           enable = lib.mkEnableOption "SSO";
 
+          plugin = lib.mkOption {
+            type = lib.types.package;
+            description = "Pluging used for SSO authentication.";
+            default = shb.mkJellyfinPlugin (rec {
+              pname = "jellyfin-plugin-sso";
+              version = "4.0.0.3";
+              url = "https://github.com/9p4/${pname}/releases/download/v${version}/sso-authentication_${version}.zip";
+              hash = "sha256-Jkuc+Ua7934iSutf/zTY1phTxaltUkfiujOkCi7BW8w=";
+            });
+          };
+
           provider = lib.mkOption {
             type = types.str;
             description = "OIDC provider name";
@@ -194,18 +261,6 @@ in
             type = types.str;
             description = "Client ID for the OIDC endpoint";
             default = "jellyfin";
-          };
-
-          adminUserGroup = lib.mkOption {
-            type = types.str;
-            description = "OIDC admin group";
-            default = "jellyfin_admin";
-          };
-
-          userGroup = lib.mkOption {
-            type = types.str;
-            description = "OIDC user group";
-            default = "jellyfin_user";
           };
 
           authorization_policy = lib.mkOption {
@@ -256,8 +311,23 @@ in
           ];
           sourceDirectoriesText = ''
             [
-                        "services.jellyfin.dataDir"
-                      ]'';
+              "services.jellyfin.dataDir"
+            ]
+          '';
+        };
+      };
+    };
+
+    dashboard = lib.mkOption {
+      description = ''
+        Dashboard contract consumer
+      '';
+      default = { };
+      type = types.submodule {
+        options = shb.contracts.dashboard.mkRequester {
+          externalUrl = "https://${fqdn}";
+          externalUrlText = "https://\${config.shb.jellyfin.subdomain}.\${config.shb.jellyfin.domain}";
+          internalUrl = "http://127.0.0.1:${toString cfg.port}";
         };
       };
     };
@@ -270,6 +340,16 @@ in
       [ "shb" "jellyfin" "adminPassword" ]
       [ "shb" "jellyfin" "admin" "password" ]
     )
+
+    # (lib.mkRenamedOptionModule
+    #   [ "shb" "jellyfin" "sso" "userGroup" ]
+    #   [ "shb" "jellyfin" "ldap" "userGroup" ]
+    # )
+
+    # (lib.mkRenamedOptionModule
+    #   [ "shb" "jellyfin" "sso" "adminUserGroup" ]
+    #   [ "shb" "jellyfin" "ldap" "adminGroup" ]
+    # )
   ];
 
   config = lib.mkIf cfg.enable {
@@ -281,6 +361,7 @@ in
     ];
 
     services.jellyfin.enable = true;
+    services.jellyfin.package = jellyfin;
 
     networking.firewall = {
       # from https://jellyfin.org/docs/general/networking/index.html, for auto-discovery
@@ -471,10 +552,10 @@ in
                     <EnableAllFolders>true</EnableAllFolders>
                     <EnabledFolders />
                     <AdminRoles>
-                      <string>${cfg.sso.adminUserGroup}</string>
+                      <string>${cfg.ldap.adminGroup}</string>
                     </AdminRoles>
                     <Roles>
-                      <string>${cfg.sso.userGroup}</string>
+                      <string>${cfg.ldap.userGroup}</string>
                     </Roles>
                     <EnableFolderRoles>false</EnableFolderRoles>
                     <FolderRoleMappings />
@@ -597,7 +678,7 @@ in
         ];
       })
       + lib.strings.optionalString cfg.ldap.enable (
-        shb.replaceSecretsScript {
+        (shb.replaceSecretsScript {
           file = ldapConfig;
           resultPath = "${config.services.jellyfin.dataDir}/plugins/configurations/LDAP-Auth.xml";
           replacements = [
@@ -606,7 +687,7 @@ in
               source = cfg.ldap.adminPassword.result.path;
             }
           ];
-        }
+        })
       )
       + lib.strings.optionalString cfg.sso.enable (
         shb.replaceSecretsScript {
@@ -627,12 +708,52 @@ in
           replacements = [
           ];
         }
+      )
+      + (
+        let
+          pluginInstallScript = p: ''
+            pluginDir="${config.services.jellyfin.dataDir}/plugins/${pluginName p}"
+            mkdir -p "$pluginDir"
+            for f in "${p}"/*; do
+              ln -sf "$f" "$pluginDir"
+            done
+
+            rm "$pluginDir/meta.json"
+            ${pkgs.jq}/bin/jq ". + {
+              status: \"Active\",
+              autoUpdate: false,
+              assemblies: []
+            }" "${p}/meta.json" > "$pluginDir/meta.json"
+
+            echo "Disabling other versions of plugin ${pluginName p}"
+            for p in "${config.services.jellyfin.dataDir}/plugins/${pluginNamePrefix p}"*; do
+              if [ "$p" = "$pluginDir" ]; then
+                continue
+              fi
+              echo "Marking plugin $p as disabled"
+              ${pkgs.jq}/bin/jq ". + {
+                status: \"Disabled\",
+              }" "$p/meta.json" > "$p/meta.json.new"
+              mv "$p/meta.json.new" "$p/meta.json"
+            done
+          '';
+        in
+        lib.concatMapStringsSep "\n" pluginInstallScript cfg.plugins
       );
+
+    shb.jellyfin.plugins =
+      lib.optionals cfg.ldap.enable [ cfg.ldap.plugin ]
+      ++ lib.optionals cfg.sso.enable [ cfg.sso.plugin ];
+
+    systemd.tmpfiles.rules = lib.optionals cfg.ldap.enable [
+      "d '${config.services.jellyfin.dataDir}/plugins' 0750 jellyfin jellyfin - -"
+    ];
 
     systemd.services.jellyfin.serviceConfig.ExecStartPost =
       let
         # We must always wait for the service to be fully initialized,
         # even if we're planning on changing the config and restarting.
+        # And the service is not initialized until this URL returns a 200 and not a 503.
         waitForCurl = pkgs.writeShellApplication {
           name = "waitForCurl";
           runtimeInputs = [ pkgs.curl ];
@@ -673,14 +794,14 @@ in
         #
         # If the file does not exist, write the config, create the file then restart.
         # If the file exists, do nothing and remove the file, resetting the state for the next time.
-        restartedFile = "${config.services.jellyfin.dataDir}/.jellyfin-restarted";
+        restartedFile = "${config.services.jellyfin.dataDir}/shb-jellyfin-restarted";
 
         writeConfig = pkgs.writeShellApplication {
           name = "writeConfig";
           runtimeInputs = [ pkgs.systemd ];
           text = ''
             if ! [ -f "${restartedFile}" ]; then
-              ${lib.getExe jellyfin-cli} wizard \
+              ${lib.getExe config.services.jellyfin.package} config \
                 --datadir='${config.services.jellyfin.dataDir}' \
                 --configdir='${config.services.jellyfin.configDir}' \
                 --cachedir='${config.services.jellyfin.cacheDir}' \
@@ -702,7 +823,7 @@ in
               rm "${restartedFile}"
             else
               echo "Restarting jellyfin.service"
-              touch "${restartedFile}"
+              echo "This file is used by SelfHostBlocks to know when to restart jellyfin" > "${restartedFile}"
               systemctl reload-or-restart jellyfin.service
             fi
           '';
@@ -719,7 +840,7 @@ in
 
     systemd.services.jellyfin.serviceConfig.TimeoutStartSec = 300;
 
-    shb.authelia.oidcClients = lib.lists.optionals (!(isNull cfg.sso)) [
+    shb.authelia.oidcClients = lib.optionals cfg.sso.enable [
       {
         client_id = cfg.sso.clientID;
         client_name = "Jellyfin";
@@ -736,7 +857,12 @@ in
         # Jellyfin SSO plugin uses client_secret_post for token exchange
         token_endpoint_auth_method = "client_secret_post";
         # Required OIDC scopes for Authelia to return group claims
-        scopes = ["openid" "profile" "email" "groups"];
+        scopes = [
+          "openid"
+          "profile"
+          "email"
+          "groups"
+        ];
       }
     ];
   };

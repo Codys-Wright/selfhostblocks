@@ -11,8 +11,10 @@ It is based on the nixpkgs Nextcloud server and provides opinionated defaults.
   to configure those with the UI.
   - [LDAP](#services-nextcloudserver-usage-ldap) app:
     enables app and sets up integration with an existing LDAP server, in this case LLDAP.
+    Note that the LDAP app cannot distinguish between normal users and admin users.
   - [SSO](#services-nextcloudserver-usage-oidc) app:
     enables app and sets up integration with an existing SSO server, in this case Authelia.
+    The SSO app can distinguish between normal users and admin users.
   - [Preview Generator](#services-nextcloudserver-usage-previewgenerator) app:
     enables app and sets up required cron job.
   - [External Storage](#services-nextcloudserver-usage-externalstorage) app:
@@ -33,8 +35,8 @@ It is based on the nixpkgs Nextcloud server and provides opinionated defaults.
 - Forces PostgreSQL as the database.
 - Forces Redis as the cache and sets good defaults.
 - Backup of the [`shb.nextcloud.dataDir`][dataDir] through the [backup block](./blocks-backup.html).
-- [Dashboard](#services-nextcloudserver-dashboard) for monitoring of reverse proxy, PHP-FPM, and database backups through the [monitoring
-  block](./blocks-monitoring.html).
+- [Monitoring Dashboard](#services-nextcloudserver-dashboard) for monitoring of reverse proxy, PHP-FPM, and database backups through the [monitoring block](./blocks-monitoring.html).
+- Integration with the [dashboard contract](contracts-dashboard.html) for displaying user facing application in a dashboard.
 - [Integration Tests](@REPO@/test/services/nextcloud.nix)
   - Tests system cron job is setup correctly.
   - Tests initial admin user and password are setup correctly.
@@ -70,10 +72,11 @@ shb.nextcloud = {
   domain = "example.com";
   subdomain = "n";
   defaultPhoneRegion = "US";
-  adminPass.result = config.shb.sops.secrets."nextcloud/adminpass".result;
+  initialAdminUsername = "root";
+  adminPass.result = config.shb.sops.secret."nextcloud/adminpass".result;
 };
 
-shb.sops.secrets."nextcloud/adminpass".request = config.shb.nextcloud.adminPass.request;
+shb.sops.secret."nextcloud/adminpass".request = config.shb.nextcloud.adminPass.request;
 ```
 
 This assumes secrets are setup with SOPS as mentioned in [the secrets setup section](usage.html#usage-secrets) of the manual.
@@ -83,7 +86,7 @@ Note though that Nextcloud will not be very happy to be accessed through HTTP,
 it much prefers - rightfully - to be accessed through HTTPS.
 We will set that up in the next section.
 
-You can now login as the admin user using the username `admin`
+You can now login as the admin user using the username `root`
 and the password defined in `sops.secrets."nextcloud/adminpass"`.
 
 ### Nextcloud through HTTPS {#services-nextcloudserver-usage-https}
@@ -163,11 +166,11 @@ shb.nextcloud.apps.ldap = {
   port = config.shb.lldap.ldapPort;
   dcdomain = config.shb.lldap.dcdomain;
   adminName = "admin";
-  adminPassword.result = config.shb.sops.secrets."nextcloud/ldap/adminPassword".result
+  adminPassword.result = config.shb.sops.secret."nextcloud/ldap/adminPassword".result
   userGroup = "nextcloud_user";
 };
 
-shb.sops.secrets."nextcloud/ldap/adminPassword" = {
+shb.sops.secret."nextcloud/ldap/adminPassword" = {
   request = config.shb.nextcloud.apps.ldap.adminPassword.request;
   settings.key = "ldap/userPassword";
 };
@@ -214,8 +217,8 @@ shb.nextcloud.apps.sso = {
   clientID = "nextcloud";
   fallbackDefaultAuth = false;
 
-  secret.result = config.shb.sops.secrets."nextcloud/sso/secret".result;
-  secretForAuthelia.result = config.shb.sops.secrets."nextcloud/sso/secretForAuthelia".result;
+  secret.result = config.shb.sops.secret."nextcloud/sso/secret".result;
+  secretForAuthelia.result = config.shb.sops.secret."nextcloud/sso/secretForAuthelia".result;
 };
 
 shb.sops.secret."nextcloud/sso/secret".request = config.shb.nextcloud.apps.sso.secret.request;
@@ -341,6 +344,22 @@ shb.restic.instances."postgres" = {
 Note that this will backup the whole PostgreSQL instance,
 not just the Nextcloud database.
 This limitation will be lifted in the future.
+
+### Application Dashboard {#services-nextcloudserver-usage-applicationdashboard}
+
+Integration with the [dashboard contract](contracts-dashboard.html) is provided
+by the [dashboard option](#services-nextcloudserver-options-shb.nextcloud.dashboard).
+
+For example using the [Homepage](services-homepage.html) service:
+
+```nix
+{
+  shb.homepage.servicesGroups.Documents.services.Nextcloud = {
+    sortOrder = 1;
+    dashboard.request = config.shb.nextcloud.dashboard.request;
+  };
+}
+```
 
 ### Enable Preview Generator App {#services-nextcloudserver-usage-previewgenerator}
 
@@ -535,7 +554,7 @@ by issuing the command `nextcloud-occ config:system:delete instanceid`.
 Head over to the [Nextcloud demo](demo-nextcloud-server.html) for a demo that installs Nextcloud with or
 without LDAP integration on a VM with minimal manual steps.
 
-## Dashboard {#services-nextcloudserver-dashboard}
+## Monitoring Dashboard {#services-nextcloudserver-dashboard}
 
 The dashboard is added to Grafana automatically under "Self Host Blocks > Nextcloud"
 as long as the Nextcloud service is [enabled][]

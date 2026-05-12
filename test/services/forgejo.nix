@@ -149,6 +149,7 @@ let
           waitForSystemdServices = [ "lldap.service" ];
 
           userGroup = "user_group";
+          adminGroup = "admin_group";
         };
       };
 
@@ -329,6 +330,7 @@ in
           basic
           shb.test.certs
           https
+          ldap
           shb.test.ldap
           (shb.test.sso config.shb.certs.certs.selfsigned.n)
           sso

@@ -143,7 +143,7 @@ let
               })
 
           with subtest("First backup in repo A"):
-              machine.succeed("systemctl start ${backupService}")
+              machine.succeed("systemctl start --wait ${backupService}")
 
           with subtest("New content"):
               machine.succeed("""
@@ -168,8 +168,12 @@ let
               assert_files("/opt/files", {})
 
           with subtest("Restore initial content from repo A"):
-              machine.succeed("""
-              ${restoreScript} restore latest
+              snapshot = machine.succeed("""
+              ${restoreScript} snapshots
+              """)
+              print(snapshot)
+              machine.succeed(f"""
+              ${restoreScript} restore {snapshot}
               """)
 
               assert_files("/opt/files", {

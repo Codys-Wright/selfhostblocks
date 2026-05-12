@@ -17,8 +17,12 @@ This block sets up the monitoring stack for Self Host Blocks. It is composed of:
   - Registration is enabled through SSO.
 - Access through [subdomain](#blocks-monitoring-options-shb.monitoring.subdomain) using reverse proxy.
 - Access through [HTTPS](#blocks-monitoring-options-shb.monitoring.ssl) using reverse proxy.
+- Integration with the [dashboard contract](contracts-dashboard.html) for displaying user facing application in a dashboard. [Manual](#blocks-monitoring-usage-applicationdashboard)
+- Out of the box integration with [Scrutiny](https://github.com/AnalogJ/scrutiny) service for Hard Drives monitoring. [Manual](#blocks-monitoring-usage-scrutiny)
 
 ## Usage {#blocks-monitoring-usage}
+
+### Initial Configuration {#blocks-monitoring-usage-configuration}
 
 The following snippet assumes a few blocks have been setup already:
 
@@ -34,16 +38,16 @@ The following snippet assumes a few blocks have been setup already:
     subdomain = "grafana";
     inherit domain;
     contactPoints = [ "me@example.com" ];
-    adminPassword.result = config.sops.secrets."monitoring/admin_password".result;
-    secretKey.result = config.sops.secrets."monitoring/secret_key".result;
-  
-      sso = {
-        enable = true;
-        authEndpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
-  
-        sharedSecret.result = config.shb.sops.secret.oidcSecret.result;
-        sharedSecretForAuthelia.result = config.shb.sops.secret.oidcAutheliaSecret.result;
-      };
+    adminPassword.result = config.shb.sops.secret."monitoring/admin_password".result;
+    secretKey.result = config.shb.sops.secret."monitoring/secret_key".result;
+
+    sso = {
+      enable = true;
+      authEndpoint = "https://${config.shb.authelia.subdomain}.${config.shb.authelia.domain}";
+
+      sharedSecret.result = config.shb.sops.secret."monitoring/oidcSecret".result;
+      sharedSecretForAuthelia.result = config.shb.sops.secret."monitoring/oidcAutheliaSecret".result;
+    };
   };
   
   shb.sops.secret."monitoring/admin_password".request = config.shb.monitoring.adminPassword.request;
@@ -67,7 +71,7 @@ LDAP groups are created automatically.
 
 ### SMTP {#blocks-monitoring-usage-smtp}
 
-I recommend adding a STMP server configuration so you receive alerts by email:
+I recommend adding an SMTP server configuration so you receive alerts by email:
 
 ```nix
 shb.monitoring.smtp = {
@@ -108,6 +112,42 @@ You might for example want to update the metrics retention time with:
 
 ```nix
 services.prometheus.retentionTime = "60d";
+```
+
+### Application Dashboard {#blocks-monitoring-usage-applicationdashboard}
+
+Integration with the [dashboard contract](contracts-dashboard.html) is provided
+by the [dashboard option](#blocks-monitoring-options-shb.monitoring.dashboard).
+
+For example using the [Homepage](services-homepage.html) service:
+
+```nix
+{
+  shb.homepage.servicesGroups.Admin.services.Grafana = {
+    sortOrder = 10;
+    dashboard.request = config.shb.monitoring.dashboard.request;
+  };
+}
+```
+
+There is also an integration for the scrutiny service, see next section.
+
+### Scrutiny {#blocks-monitoring-usage-scrutiny}
+
+Integration with the [Scrutiny](https://github.com/AnalogJ/scrutiny) service is enabled by default and setup automatically.
+
+The web interface will be served under the [scrutiny.subdomain](#blocks-monitoring-options-shb.monitoring.scrutiny.subdomain) option.
+If you don't want the web interface, set the option to `null`.
+
+For integration with the [dashboard contract](contracts-dashboard.html):
+
+```nix
+{
+  shb.homepage.servicesGroups.Admin.services.Scrutiny = {
+    sortOrder = 11;
+    dashboard.request = config.shb.monitoring.scrutiny.dashboard.request;
+  };
+}
 ```
 
 ## Provisioning {#blocks-monitoring-provisioning}
@@ -243,6 +283,16 @@ Graphs:
   It will show up as annotations in the "Schedule" panel of the dashboard.
 
 ![Late SSL Jobs Alert Firing](./assets/alert_rules_LateSSL_1.png)
+
+## Impermanence {#blocks-monitoring-impermanence}
+
+To save the fluent-bit folder in an impermanence setup, add:
+
+```nix
+{
+  shb.zfs.datasets."safe/monitoring-fluent-bit".path = config.shb.jellyfin.impermanence.fluent-bit;
+}
+```
 
 ## Options Reference {#blocks-monitoring-options}
 

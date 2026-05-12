@@ -16,6 +16,70 @@ Template:
 
 # Upcoming Release
 
+# v0.8.0
+
+## Breaking Changes
+
+- Bump of Nextcloud version to 32 and 33 because of nixpkgs bump. All provided apps are verified compatible with Nextcloud 33 thanks to new tests.
+
+## New Features
+
+- Added Immich Public Proxy service
+- Add homepage service with dashboard contract implemented by all services
+- Add scrutiny service.
+- ZFS module now supports setting permissions
+- Add landing page for mailserver and dashboard contract integration
+
+## Bug Fixes
+
+- Use configurable dataDir in arr stack
+- Forgejo ensures ldap is setup when sso is configured
+- Add nixpkgs patches on aarch64-linux too
+- Self-signed certs are now idempotent
+- Prometheus scrapes metrics at 15s interval instead of 1m
+
+## Other Changes
+
+- Arr stack declares ldap groups, declare ApiKeys and bypasses auth for readarr when sso is enabled
+- Forgejo declares ldap group
+
+# v0.7.3
+
+## New Features
+
+- Add [mailserver module](https://shb.skarabox.com/services-mailserver.html) integrating with [Simple NixOS Mailserver](https://gitlab.com/simple-nixos-mailserver/nixos-mailserver) and allowing full backup of an email provider.
+- Bump nixpkgs from https://github.com/NixOS/nixpkgs/commit/5e2a59a5b1a82f89f2c7e598302a9cacebb72a67 to https://github.com/NixOS/nixpkgs/commit/bfc1b8a4574108ceef22f02bafcf6611380c100d. [Full diff](https://github.com/nixos/nixpkgs/compare/5e2a59a5b1a82f89f2c7e598302a9cacebb72a67...bfc1b8a4574108ceef22f02bafcf6611380c100d).
+  On top of minor changes, the most notable one was:
+  - Updated Jellyfin LDAP and SSO plugins and configuration. @Codys-Wright
+
+## Bug Fixes
+
+- Fix Restic and Authelia modules referencing systemd services without the `.service` suffix and leading to 
+
+# v0.7.2
+
+## New Features
+
+- Forgejo uses secrets contract for smtp password.
+- Add [Firefly-iii](https://shb.skarabox.com/services-firefly-iii.html) service.
+- Jellyfin can [install plugins declaratively](https://shb.skarabox.com/services-jellyfin.html#services-jellyfin-options-shb.jellyfin.plugins).
+  (Support is quite crude and WIP).
+- Jellyfin configures LDAP and SSO fully declaratively, including installing necessary plugins.
+- Nextcloud 32 is fully supported thanks to tests for version 31 and 32.
+
+## Fixes
+
+- Revert Authelia to continue using dots in systemd service names.
+  This caused issue with nginx name resolution.
+
+## Other Changes
+
+- Authelia uses non deprecated `smtp.address` option.
+- Add documentation for Nginx block
+- Now a user which is only member of the admin LDAP group of a service can login.
+  Before, some services required a user to be member of both the user and admin LDAP group.
+  This is ensured by regression tests going forward.
+
 # v0.7.1
 
 ## New Features
